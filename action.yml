@@ -1,0 +1,9 @@
+name: 'Release Bot'
+description: 'Standard Pony Library and Application release functionality'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+inputs:
+  step:
+    description: 'start-a-release, trigger-release-announcement, or announce-a-release'
+    required: true

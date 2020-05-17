@@ -48,7 +48,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Start
-        uses: ponylang/release-bot-action@0.0.1
+        uses: ponylang/release-bot-action@0.1.0
         with:
           step: start-a-release
         env:
@@ -83,7 +83,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Trigger
-        uses: ponylang/release-bot-action@0.0.1
+        uses: ponylang/release-bot-action@0.1.0
         with:
           step: trigger-release-announcement
         env:
@@ -116,7 +116,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Announce
-        uses: ponylang/release-bot-action@0.0.1
+        uses: ponylang/release-bot-action@0.1.0
         with:
           step: announce-a-release
         env:

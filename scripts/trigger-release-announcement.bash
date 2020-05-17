@@ -59,4 +59,4 @@ git tag "announce-${VERSION}"
 
 # push tag
 echo -e "\e[34mPushing announce-${VERSION} tag\e[0m"
-git push ${PUSH_TO} "announce-${VERSION}"
+git push "${PUSH_TO}" "announce-${VERSION}"

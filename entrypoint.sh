@@ -20,7 +20,7 @@ case ${INPUT_STEP} in
     bash /announce-a-release.bash
     ;;
   *)
-    echo -e "\e[31mUnknown step. `step` should be one of: "
+    echo -e "\e[31mUnknown step. 'step' should be one of: "
     echo -e "* start-a-release"
     echo -e "* trigger-release-announcement"
     echo -e "* announce-a-release\e[0m"

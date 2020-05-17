@@ -114,7 +114,7 @@ See the [release notes](https://github.com/${GITHUB_REPOSITORY}/releases/tag/${V
 "
 
 curl -s -X POST https://ponylang.zulipchat.com/api/v1/messages \
-  -u ${ZULIP_TOKEN} \
+  -u "${ZULIP_TOKEN}" \
   -d "type=stream" \
   -d "to=announce" \
   -d "topic=${ASSET_NAME}" \
@@ -162,4 +162,4 @@ fi
 
 # delete announce-VERSION tag
 echo -e "\e[34mDeleting no longer needed remote tag announce-${VERSION}\e[0m"
-git push --delete ${PUSH_TO} "announce-${VERSION}"
+git push --delete "${PUSH_TO}" "announce-${VERSION}"

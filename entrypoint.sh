@@ -4,8 +4,8 @@ set -o errexit
 
 # Set up GitHub credentials
 # These are shared across all step types
-git config --global user.name 'Ponylang Main Bot'
-git config --global user.email 'ponylang.main@gmail.com'
+git config --global user.name "${INPUT_GIT_USER_NAME}"
+git config --global user.email "${INPUT_GIT_USER_EMAIL}"
 git config --global push.default simple
 
 # Determine step and run the corresponding script

@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Changed
 
+- Don't tie release commits to ponylang-main account ([PR #6](https://github.com/ponylang/release-bot-action/pull/6))
 
 ## [0.1.0] - 2020-05-17
 

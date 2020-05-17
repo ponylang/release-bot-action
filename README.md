@@ -51,6 +51,8 @@ jobs:
         uses: ponylang/release-bot-action@0.1.0
         with:
           step: start-a-release
+          git_user_name: "Ponylang Main Bot"
+          git_user_email: "ponylang.main@gmail.com"
         env:
           RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
 ```
@@ -86,6 +88,8 @@ jobs:
         uses: ponylang/release-bot-action@0.1.0
         with:
           step: trigger-release-announcement
+          git_user_name: "Ponylang Main Bot"
+          git_user_email: "ponylang.main@gmail.com"
         env:
           RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
 ```
@@ -119,6 +123,8 @@ jobs:
         uses: ponylang/release-bot-action@0.1.0
         with:
           step: announce-a-release
+          git_user_name: "Ponylang Main Bot"
+          git_user_email: "ponylang.main@gmail.com"
         env:
           ASSET_NAME: "My awesome application/library"
           RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}

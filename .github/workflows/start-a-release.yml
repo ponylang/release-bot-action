@@ -1,22 +1,20 @@
-name: Announce a release
+name: Start a release
 
 on:
   push:
-    tags: announce-*.*.*
+    tags: release-*.*.*
 
 jobs:
-  announce-a-release:
-    name: Announce a release
+  start-a-release:
+    name: Start a release
     runs-on: ubuntu-latest
     container:
       image: ponylang/shared-docker-ci-release:20191107
     steps:
       - uses: actions/checkout@v1
-      - name: Announce
+      - name: Start
         uses: ponylang/release-bot-action@0.1.0
         with:
-          step: announce-a-release
+          step: start-a-release
         env:
-          ASSET_NAME: "release-bot-action"
           RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
-          ZULIP_TOKEN: ${{ secrets.ZULIP_TOKEN }}

@@ -43,8 +43,6 @@ jobs:
   start-a-release:
     name: Start a release
     runs-on: ubuntu-latest
-    container:
-      image: ponylang/shared-docker-ci-release:20191107
     steps:
       - uses: actions/checkout@v1
       - name: Start
@@ -79,8 +77,6 @@ jobs:
   trigger-release-announcement:
     name: Trigger release announcement
     runs-on: ubuntu-latest
-    container:
-      image: ponylang/shared-docker-ci-release:20191107
     needs: [ARTIFACT_BUILDING_STEPS_HERE]
     steps:
       - uses: actions/checkout@v1
@@ -115,8 +111,6 @@ jobs:
   announce-a-release:
     name: Announce a release
     runs-on: ubuntu-latest
-    container:
-      image: ponylang/shared-docker-ci-release:20191107
     steps:
       - uses: actions/checkout@v1
       - name: Announce

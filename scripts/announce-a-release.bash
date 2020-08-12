@@ -175,7 +175,7 @@ echo -e "\e[34mDeleting no longer needed remote tag announce-${VERSION}\e[0m"
 git push --delete "${PUSH_TO}" "announce-${VERSION}"
 
 ### this doesn't account for master changing commit, assumes we are HEAD
-# or can otherwise push without issue. that shouldl error out without issue.
+# or can otherwise push without issue. that should error out without issue.
 # leaving us to restart from a different HEAD commit
 git checkout master
 git pull

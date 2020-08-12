@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Added
 
+- Add support for adding release notes as part of the release process ([PR #9](https://github.com/ponylang/release-bot-action/pull/9))
 
 ### Changed
 

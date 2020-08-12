@@ -75,7 +75,17 @@ VERSION="${GITHUB_REF/refs\/tags\/announce-/}"
 
 # Prepare release notes
 echo -e "\e[34mPreparing to update GitHub release notes...\e[0m"
-body=$(changelog-tool get "${VERSION}")
+release_notes=""
+if test -f ".release-notes/next-release.md"; then
+  echo -e "\e[34mnext-release.md found. Adding entries to release notes.\e[0m"
+  fc=$(<".release-notes/next-release.md")
+  release_notes="${fc}\n\n"
+else
+  echo -e "\e[34mNo next-release.md found. Only using changelog entries\e[0m"
+fi
+
+changelog=$(changelog-tool get "${VERSION}")
+body="${release_notes}${changelog}"
 
 jsontemplate="
 {
@@ -163,3 +173,18 @@ fi
 # delete announce-VERSION tag
 echo -e "\e[34mDeleting no longer needed remote tag announce-${VERSION}\e[0m"
 git push --delete "${PUSH_TO}" "announce-${VERSION}"
+
+### this doesn't account for master changing commit, assumes we are HEAD
+# or can otherwise push without issue. that should error out without issue.
+# leaving us to restart from a different HEAD commit
+git checkout master
+git pull
+
+# rotate next-release.md content
+echo -e "\e[34mRotating release notes\e[0m"
+mv ".release-notes/next-release.md" ".release-notes/${VERSION}.md"
+touch ".release-notes/next-release.md"
+git add .release-notes/*
+git commit -m "Rotate release notes as part of ${VERSION} release [skip ci]"
+echo -e "\e[34mPushing release notes changes\e[0m"
+git push "${PUSH_TO}" master

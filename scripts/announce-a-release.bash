@@ -181,10 +181,12 @@ git checkout master
 git pull
 
 # rotate next-release.md content
-echo -e "\e[34mRotating release notes\e[0m"
-mv ".release-notes/next-release.md" ".release-notes/${VERSION}.md"
-touch ".release-notes/next-release.md"
-git add .release-notes/*
-git commit -m "Rotate release notes as part of ${VERSION} release [skip ci]"
-echo -e "\e[34mPushing release notes changes\e[0m"
-git push "${PUSH_TO}" master
+if test -f ".release-notes/next-release.md"; then
+  echo -e "\e[34mRotating release notes\e[0m"
+  mv ".release-notes/next-release.md" ".release-notes/${VERSION}.md"
+  touch ".release-notes/next-release.md"
+  git add .release-notes/*
+  git commit -m "Rotate release notes as part of ${VERSION} release [skip ci]"
+  echo -e "\e[34mPushing release notes changes\e[0m"
+  git push "${PUSH_TO}" master
+fi

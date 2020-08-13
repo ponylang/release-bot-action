@@ -120,7 +120,6 @@ jobs:
           git_user_name: "Ponylang Main Bot"
           git_user_email: "ponylang.main@gmail.com"
         env:
-          ASSET_NAME: "My awesome application/library"
           RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
           ZULIP_TOKEN: ${{ secrets.ZULIP_TOKEN }}
 ```

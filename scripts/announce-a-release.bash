@@ -20,12 +20,6 @@ set -o errexit
 # We validate all that need to be set in case, in an absolute emergency,
 # we need to run this by hand. Otherwise the GitHub actions environment should
 # provide all of these if properly configured
-if [[ -z "${ASSET_NAME}" ]]; then
-  echo -e "\e[31mName of the application being announced needs to be set in ASSET_NAME."
-  echo -e "Exiting.\e[0m"
-  exit 1
-fi
-
 if [[ -z "${GITHUB_REF}" ]]; then
   echo -e "\e[31mThe release tag needs to be set in GITHUB_REF."
   echo -e "\e[31mThe tag should be in the following GitHub specific form:"
@@ -118,7 +112,7 @@ fi
 
 # Send announcement to Zulip
 message="
-Version ${VERSION} of ${ASSET_NAME} has been released.
+Version ${VERSION} of ${GITHUB_REPOSITORY} has been released.
 
 See the [release notes](https://github.com/${GITHUB_REPOSITORY}/releases/tag/${VERSION}) for more details.
 "
@@ -127,7 +121,7 @@ curl -s -X POST https://ponylang.zulipchat.com/api/v1/messages \
   -u "${ZULIP_TOKEN}" \
   -d "type=stream" \
   -d "to=announce" \
-  -d "topic=${ASSET_NAME}" \
+  -d "topic=${GITHUB_REPOSITORY}" \
   -d "content=${message}"
 
 # Update Last Week in Pony
@@ -138,7 +132,7 @@ result=$(curl https://api.github.com/repos/ponylang/ponylang-website/issues?labe
 lwip_url=$(echo "${result}" | jq -r '.[].url')
 if [ "$lwip_url" != "" ]; then
   body="
-Version ${VERSION} of ${ASSET_NAME} has been released.
+Version ${VERSION} of ${GITHUB_REPOSITORY} has been released.
 
 See the [release notes](https://github.com/${GITHUB_REPOSITORY}/releases/tag/${VERSION}) for more details.
 "

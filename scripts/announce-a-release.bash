@@ -133,7 +133,6 @@ lwip_url=$(echo "${result}" | jq -r '.[].url')
 if [ "$lwip_url" != "" ]; then
   body="
 Version ${VERSION} of ${GITHUB_REPOSITORY} has been released.
-
 See the [release notes](https://github.com/${GITHUB_REPOSITORY}/releases/tag/${VERSION}) for more details.
 "
 

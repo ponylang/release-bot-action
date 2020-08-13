@@ -37,7 +37,7 @@ name: Start a release
 
 on:
   push:
-    tags: release-*.*.*
+    tags: release-\d+.\d+.\d+
 
 jobs:
   start-a-release:
@@ -105,7 +105,7 @@ name: Announce a release
 
 on:
   push:
-    tags: announce-*.*.*
+    tags: announce-\d+.\d+.\d+
 
 jobs:
   announce-a-release:

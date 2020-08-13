@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Fixed
 
+- Make .release-notes support optional ([PR #10](https://github.com/ponylang/release-bot-action/pull/10))
 
 ### Added
 

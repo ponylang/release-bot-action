@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Changed
 
+- Make ASSET_NAME hardcoded ([PR #11](https://github.com/ponylang/release-bot-action/pull/11))
 
 ## [0.2.2] - 2020-08-13
 

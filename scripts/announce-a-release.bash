@@ -179,7 +179,7 @@ if test -f ".release-notes/next-release.md"; then
   mv ".release-notes/next-release.md" ".release-notes/${VERSION}.md"
   touch ".release-notes/next-release.md"
   git add .release-notes/*
-  git commit -m "Rotate release notes as part of ${VERSION} release [skip ci]"
+  git commit -m "Rotate release notes as part of ${VERSION} release"
   echo -e "\e[34mPushing release notes changes\e[0m"
   git push "${PUSH_TO}" master
 fi

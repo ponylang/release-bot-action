@@ -103,7 +103,7 @@ changelog-tool unreleased -e
 # commit changelog and push to master
 echo -e "\e[34mCommiting CHANGELOG.md change\e[0m"
 git add CHANGELOG.md
-git commit -m "Add unreleased section to CHANGELOG post ${VERSION} release [skip ci]"
+git commit -m "Add unreleased section to CHANGELOG post ${VERSION} release"
 
 echo -e "\e[34mPushing CHANGELOG.md\e[0m"
 git push "${PUSH_TO}" master

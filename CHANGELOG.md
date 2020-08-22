@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Fixed
 
+- Fix bash-ism in formatting for GitHub release notes ([PR #19](https://github.com/ponylang/release-bot-action/pull/19))
 
 ### Added
 

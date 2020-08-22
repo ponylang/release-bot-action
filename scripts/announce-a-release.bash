@@ -73,7 +73,9 @@ release_notes=""
 if test -f ".release-notes/next-release.md"; then
   echo -e "\e[34mnext-release.md found. Adding entries to release notes.\e[0m"
   fc=$(<".release-notes/next-release.md")
-  release_notes="${fc}\n\n"
+  release_notes="${fc}
+  
+"
 else
   echo -e "\e[34mNo next-release.md found. Only using changelog entries\e[0m"
 fi

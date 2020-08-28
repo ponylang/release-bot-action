@@ -48,10 +48,22 @@ set -o nounset
 
 PUSH_TO="https://${RELEASE_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
 
-# Extract version from tag reference
-# Tag ref version: "refs/tags/1.0.0"
-# Version: "1.0.0"
-VERSION="${GITHUB_REF/refs\/tags\//}"
+if [[ -z "${VERSION}" ]]; then
+  echo -e "\e[34mOptional VERSION environment variable found. Using it.\e[0m"
+else
+  # Extract version from tag reference
+  # Tag ref version: "refs/tags/1.0.0"
+  # Version: "1.0.0"
+  # Note, this will only work if the action was kicked off by the push of tag.
+  # Anything else will result in the ref being something like
+  # "refs/heads/master" and the pushed tag will be something 'incorrect' like
+  # "announce-refs/heads/master".
+  # If you are using this action and it isn't triggered by a tag push, you must
+  # use the optional VERSION environment variable instead of falling back to
+  # the default behavior of extracting the version from GITHUB_REF.
+  echo -e "\e[34mExtracting version from GITHUB_REF.\e[0m"
+  VERSION="${GITHUB_REF/refs\/tags\//}"
+fi
 
 # tag for announcement
 echo -e "\e[34mTagging to kick off release announcement\e[0m"

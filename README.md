@@ -90,6 +90,8 @@ jobs:
           RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
 ```
 
+trigger-release-announcement, by default, will extract the version being released from the GITHUB_REF environment variable. For this default action to work, trigger-release-announcement must be kicked off by a tag being pushed. If you set up the step to be triggered in any other fashion it will not work unless you supply the version yourself. You can supply the version by providing an optional environment variable `VERSION` set to the version being released.
+
 ## announce-a-release
 
 Announces a release after artifacts have been built:

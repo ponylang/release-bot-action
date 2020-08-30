@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Changed
 
+- Allow for setting the default branch ([PR #24](https://github.com/ponylang/release-bot-action/pull/24))
 
 ## [0.3.3] - 2020-08-30
 

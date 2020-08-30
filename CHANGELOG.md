@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Added
 
+- Allow for overriding how trigger release announcement step gets version information ([PR #23](https://github.com/ponylang/release-bot-action/pull/23))
 
 ### Changed
 

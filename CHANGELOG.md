@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Fixed
 
+- Fix broken trigger-release-announcement step ([PR #25](https://github.com/ponylang/release-bot-action/pull/25))
 
 ### Added
 

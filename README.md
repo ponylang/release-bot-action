@@ -20,8 +20,6 @@ announce-a-release will post:
 
 Once announce-a-release has completed, the release process is done. For more in-depth details, please see each of the respective scripts in [scripts](scripts/).
 
-**N.B.** The environment variable `RELEASE_TOKEN` that is required by each step **must** be a personal access token with `public_repo` access. You can not use the `GITHUB_TOKEN` environment variable provided by GitHub's action environment. If you try to use `GITHUB_TOKEN`, no additional steps will trigger after start-a-release has completed.
-
 ## Example workflows
 
 ### start-a-release
@@ -124,4 +122,27 @@ jobs:
         env:
           RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
           ZULIP_TOKEN: ${{ secrets.ZULIP_TOKEN }}
+```
+
+**N.B.** The environment variable `RELEASE_TOKEN` that is required by each step **must** be a personal access token with `public_repo` access. You can not use the `GITHUB_TOKEN` environment variable provided by GitHub's action environment. If you try to use `GITHUB_TOKEN`, no additional steps will trigger after start-a-release has completed.
+
+**N.B.** This action assumes that the default branch of your repository is named `main`. If it isn't named main, you will need to override that with an optional input parameter `default_branch`.
+
+For example, if your repository's default branch is called `trunk`, instead of having something like:
+
+```yml
+        with:
+          step: announce-a-release
+          git_user_name: "Ponylang Main Bot"
+          git_user_email: "ponylang.main@gmail.com"
+```
+
+you would update to:
+
+```yml
+        with:
+          step: announce-a-release
+          git_user_name: "Ponylang Main Bot"
+          git_user_email: "ponylang.main@gmail.com"
+          default_branch: "trunk"
 ```

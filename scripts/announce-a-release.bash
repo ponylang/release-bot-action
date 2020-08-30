@@ -74,7 +74,7 @@ if test -f ".release-notes/next-release.md"; then
   echo -e "\e[34mnext-release.md found. Adding entries to release notes.\e[0m"
   fc=$(<".release-notes/next-release.md")
   release_notes="${fc}
-  
+
 "
 else
   echo -e "\e[34mNo next-release.md found. Only using changelog entries\e[0m"
@@ -169,10 +169,9 @@ fi
 echo -e "\e[34mDeleting no longer needed remote tag announce-${VERSION}\e[0m"
 git push --delete "${PUSH_TO}" "announce-${VERSION}"
 
-### this doesn't account for master changing commit, assumes we are HEAD
-# or can otherwise push without issue. that should error out without issue.
-# leaving us to restart from a different HEAD commit
-git checkout master
+# This doesn't account for the default branch changing commit. It assumes we
+# are HEAD or can otherwise push without issue.
+git checkout "${INPUT_DEFAULT_BRANCH}"
 git pull
 
 # rotate next-release.md content
@@ -183,5 +182,5 @@ if test -f ".release-notes/next-release.md"; then
   git add .release-notes/*
   git commit -m "Rotate release notes as part of ${VERSION} release"
   echo -e "\e[34mPushing release notes changes\e[0m"
-  git push "${PUSH_TO}" master
+  git push "${PUSH_TO}" "${INPUT_DEFAULT_BRANCH}"
 fi

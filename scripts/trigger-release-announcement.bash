@@ -48,8 +48,8 @@ if [[ -z "${VERSION}" ]]; then
   # Version: "1.0.0"
   # Note, this will only work if the action was kicked off by the push of tag.
   # Anything else will result in the ref being something like
-  # "refs/heads/master" and the pushed tag will be something 'incorrect' like
-  # "announce-refs/heads/master".
+  # "refs/heads/main" and the pushed tag will be something 'incorrect' like
+  # "announce-refs/heads/main".
   # If you are using this action and it isn't triggered by a tag push, you must
   # use the optional VERSION environment variable instead of falling back to
   # the default behavior of extracting the version from GITHUB_REF.

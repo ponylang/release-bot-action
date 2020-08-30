@@ -2,14 +2,14 @@
 
 # Starts the release process by:
 #
-# - Getting latest changes on master
+# - Getting latest changes on the default branch
 # - Updating version in
 #   - VERSION
 #   - CHANGELOG.md
-# - Pushing updated VERSION and CHANGELOG.md back to master
+# - Pushing updated VERSION and CHANGELOG.md back to the default branch
 # - Pushing tag to kick off building artifacts
 # - Adding a new "unreleased" section to CHANGELOG
-# - Pushing updated CHANGELOG back to master
+# - Pushing updated CHANGELOG back to the default branch
 #
 # Tools required in the environment that runs this:
 #
@@ -64,10 +64,9 @@ PUSH_TO="https://${RELEASE_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
 # Version: "1.0.0"
 VERSION="${GITHUB_REF/refs\/tags\/release-/}"
 
-### this doesn't account for master changing commit, assumes we are HEAD
-# or can otherwise push without issue. that shouldl error out without issue.
-# leaving us to restart from a different HEAD commit
-git checkout master
+# this doesn't account for the default changing commit. It ssumes we are HEAD
+# or can otherwise push without issue.
+git checkout "${INPUT_DEFAULT_BRANCH}"
 git pull
 
 # update VERSION
@@ -88,8 +87,8 @@ echo -e "\e[34mTagging for release to kick off building artifacts\e[0m"
 git tag "${VERSION}"
 
 # push to release to remote
-echo -e "\e[34mPushing commited changes back to master\e[0m"
-git push "${PUSH_TO}" master
+echo -e "\e[34mPushing commited changes back to ${INPUT_DEFAULT_BRANCH}\e[0m"
+git push "${PUSH_TO}" "${INPUT_DEFAULT_BRANCH}"
 echo -e "\e[34mPushing ${VERSION} tag\e[0m"
 git push "${PUSH_TO}" "${VERSION}"
 
@@ -100,13 +99,13 @@ git pull
 echo -e "\e[34mAdding new 'unreleased' section to CHANGELOG.md\e[0m"
 changelog-tool unreleased -e
 
-# commit changelog and push to master
+# commit changelog and push to ${INPUT_DEFAULT_BRANCH}
 echo -e "\e[34mCommiting CHANGELOG.md change\e[0m"
 git add CHANGELOG.md
 git commit -m "Add unreleased section to CHANGELOG post ${VERSION} release"
 
 echo -e "\e[34mPushing CHANGELOG.md\e[0m"
-git push "${PUSH_TO}" master
+git push "${PUSH_TO}" "${INPUT_DEFAULT_BRANCH}"
 
 # delete release-VERSION tag
 echo -e "\e[34mDeleting no longer needed remote tag release-${VERSION}\e[0m"

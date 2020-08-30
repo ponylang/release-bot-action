@@ -42,15 +42,7 @@ if [[ -z "${RELEASE_TOKEN}" ]]; then
   exit 1
 fi
 
-# no unset variables allowed from here on out
-# allow above so we can display nice error messages for expected unset variables
-set -o nounset
-
-PUSH_TO="https://${RELEASE_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-
 if [[ -z "${VERSION}" ]]; then
-  echo -e "\e[34mOptional VERSION environment variable found. Using it.\e[0m"
-else
   # Extract version from tag reference
   # Tag ref version: "refs/tags/1.0.0"
   # Version: "1.0.0"
@@ -63,7 +55,15 @@ else
   # the default behavior of extracting the version from GITHUB_REF.
   echo -e "\e[34mExtracting version from GITHUB_REF.\e[0m"
   VERSION="${GITHUB_REF/refs\/tags\//}"
+else
+  echo -e "\e[34mOptional VERSION environment variable found. Using it.\e[0m"
 fi
+
+# no unset variables allowed from here on out
+# allow above so we can display nice error messages for expected unset variables
+set -o nounset
+
+PUSH_TO="https://${RELEASE_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
 
 # tag for announcement
 echo -e "\e[34mTagging to kick off release announcement\e[0m"

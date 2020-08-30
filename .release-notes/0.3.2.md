@@ -1,0 +1,37 @@
+## Allow for overriding how trigger release announcement step gets version information
+
+Adds an optional environment variable VERSION that can be set to an explicit value when using the trigger-release-announcement step instead of getting the version from GITHUB_REF.
+
+The VERSION environment variable allows for a wider variety of ways to trigger the step. Prior to this change, the step would not work if it wasn't triggered by pushing a tag. With this change, you can now use it other workflows.
+
+[ponyc](https://github.com/ponylang/ponyc) will use it to be triggered once assets are uploaded to Cloudsmith doing something slightly more complicated than the following simplified example:
+
+
+```yaml
+name: Handle external events
+
+on: repository_dispatch
+
+jobs:
+  trigger-release-announcement:
+    if: |
+      github.event.action == 'cloudsmith-package-synchronised' &&
+      github.event.client_payload.data.repository == 'releases' &&
+      github.event.client_payload.data.name == 'ponyc-x86-64-unknown-linux-musl.tar.gz'
+
+    name: Trigger release announcement
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Trigger
+        uses: ponylang/release-bot-action@0.3.2
+        with:
+          step: trigger-release-announcement
+          git_user_name: "Ponylang Main Bot"
+          git_user_email: "ponylang.main@gmail.com"
+        env:
+          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          VERSION: ${{ github.event.client_payload.data.version }}
+```
+

@@ -46,7 +46,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Start
-        uses: ponylang/release-bot-action@0.3.1
+        uses: ponylang/release-bot-action@0.3.2
         with:
           step: start-a-release
           git_user_name: "Ponylang Main Bot"
@@ -81,7 +81,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Trigger
-        uses: ponylang/release-bot-action@0.3.1
+        uses: ponylang/release-bot-action@0.3.2
         with:
           step: trigger-release-announcement
           git_user_name: "Ponylang Main Bot"
@@ -116,7 +116,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Announce
-        uses: ponylang/release-bot-action@0.3.1
+        uses: ponylang/release-bot-action@0.3.2
         with:
           step: announce-a-release
           git_user_name: "Ponylang Main Bot"

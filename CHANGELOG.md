@@ -2,17 +2,11 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/) and [Keep a CHANGELOG](http://keepachangelog.com/).
 
-## [unreleased] - unreleased
+## [0.3.3] - 2020-08-30
 
 ### Fixed
 
 - Fix broken trigger-release-announcement step ([PR #25](https://github.com/ponylang/release-bot-action/pull/25))
-
-### Added
-
-
-### Changed
-
 
 ## [0.3.2] - 2020-08-30
 

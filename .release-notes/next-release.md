@@ -8,3 +8,7 @@ The default branch is the branch that we push back changelog, release note, and 
 
 **All repositories still using `master` as the default branch will need to set the `default_branch` value to `master` to continue working** when they upgrade to a version of release-bot-action containing this commit.
 
+## Update version in corral.json on release
+
+Prior to this release, the verison field in corral.json wasn't being updated on release.
+

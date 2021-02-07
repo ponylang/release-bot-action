@@ -5,6 +5,7 @@
 # - Getting latest changes on the default branch
 # - Updating version in
 #   - VERSION
+#   - corral.json
 #   - CHANGELOG.md
 # - Pushing updated VERSION and CHANGELOG.md back to the default branch
 # - Pushing tag to kick off building artifacts
@@ -16,6 +17,7 @@
 # - bash
 # - changelog-tool
 # - git
+# - jq
 
 set -o errexit
 
@@ -73,13 +75,24 @@ git pull
 echo -e "\e[34mUpdating VERSION to ${VERSION}\e[0m"
 echo "${VERSION}" > VERSION
 
+# update version in corral.json if it exists
+if test -f "corral.json"; then
+  echo -e "\e[34mUpdating VERSION in corral.json to ${VERSION}\e[0m"
+  jq ".info.version = \"${VERSION}\"" corral.json > corral.tmp
+  mv corral.tmp corral.json
+fi
+
 # version the changelog
 echo -e "\e[34mUpdating CHANGELOG.md for release\e[0m"
 changelog-tool release "${VERSION}" -e
 
-# commit CHANGELOG and VERSION updates
+# commit "version" updates
 echo -e "\e[34mCommiting VERSION and CHANGELOG.md changes\e[0m"
 git add CHANGELOG.md VERSION
+if test -f "corral.json"; then
+  echo -e "\e[34mCommiting corral.json changes\e[0m"
+  git add corral.json
+fi
 git commit -m "${VERSION} release"
 
 # tag release

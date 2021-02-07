@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Fixed
 
+- Update version in corral.json on release ([PR #28](https://github.com/ponylang/release-bot-action/pull/28))
 
 ### Added
 

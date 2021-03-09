@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Changed
 
+- Use annotated tags for releases ([PR #30](https://github.com/ponylang/release-bot-action/pull/30))
 
 ## [0.4.0] - 2021-02-07
 

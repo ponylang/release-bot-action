@@ -97,7 +97,7 @@ git commit -m "${VERSION} release"
 
 # tag release
 echo -e "\e[34mTagging for release to kick off building artifacts\e[0m"
-git tag "${VERSION}"
+git tag -a "${VERSION}" -m "Version ${VERSION}"
 
 # push to release to remote
 echo -e "\e[34mPushing commited changes back to ${INPUT_DEFAULT_BRANCH}\e[0m"

@@ -42,7 +42,7 @@ jobs:
     name: Start a release
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: Start
         uses: ponylang/release-bot-action@0.5.0
         with:
@@ -77,7 +77,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ARTIFACT_BUILDING_STEPS_HERE]
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: Trigger
         uses: ponylang/release-bot-action@0.5.0
         with:
@@ -112,7 +112,7 @@ jobs:
     name: Announce a release
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: Announce
         uses: ponylang/release-bot-action@0.5.0
         with:

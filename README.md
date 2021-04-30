@@ -42,7 +42,7 @@ jobs:
     name: Start a release
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v1
       - name: Start
         uses: docker://ponylang/release-bot-action:0.5.0
         with:

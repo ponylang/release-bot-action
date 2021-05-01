@@ -33,19 +33,6 @@ if [[ -z "${GITHUB_REF}" ]]; then
   exit 1
 fi
 
-if [[ -z "${RELEASE_TOKEN}" ]]; then
-  echo -e "\e[31mA personal access token needs to be set in RELEASE_TOKEN."
-  echo -e "\e[31mIt should not be secrets.GITHUB_TOKEN. It has to be a"
-  echo -e "\e[31mpersonal access token otherwise next steps in the release"
-  echo -e "\e[31mprocess WILL NOT trigger."
-  echo -e "\e[31mPersonal access tokens are in the form:"
-  echo -e "\e[31m     TOKEN"
-  echo -e "\e[31mfor example:"
-  echo -e "\e[31m     1234567890"
-  echo -e "\e[31mExiting.\e[0m"
-  exit 1
-fi
-
 if [[ -z "${VERSION}" ]]; then
   # Extract version from tag reference
   # Tag ref version: "refs/tags/1.0.0"
@@ -67,12 +54,10 @@ fi
 # allow above so we can display nice error messages for expected unset variables
 set -o nounset
 
-PUSH_TO="https://${RELEASE_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-
 # tag for announcement
 echo -e "\e[34mTagging to kick off release announcement\e[0m"
 git tag "announce-${VERSION}"
 
 # push tag
 echo -e "\e[34mPushing announce-${VERSION} tag\e[0m"
-git push "${PUSH_TO}" "announce-${VERSION}"
+git push origin "announce-${VERSION}"

@@ -42,15 +42,16 @@ jobs:
     name: Start a release
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
+        with:
+          ref: "main"
+          token: ${{ secrets.RELEASE_TOKEN }}
       - name: Start
         uses: docker://ponylang/release-bot-action:0.5.0
         with:
           entrypoint: start-a-release.bash
           git_user_name: "Ponylang Main Bot"
           git_user_email: "ponylang.main@gmail.com"
-        env:
-          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
 ```
 
 ## trigger-release-announcement
@@ -78,14 +79,15 @@ jobs:
     needs: [ARTIFACT_BUILDING_STEPS_HERE]
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: "main"
+          token: ${{ secrets.RELEASE_TOKEN }}
       - name: Trigger
         uses: docker://ponylang/release-bot-action:0.5.0
         with:
           entrypoint: trigger-release-announcement.bash
           git_user_name: "Ponylang Main Bot"
           git_user_email: "ponylang.main@gmail.com"
-        env:
-          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
 ```
 
 trigger-release-announcement, by default, will extract the version being released from the GITHUB_REF environment variable. For this default action to work, trigger-release-announcement must be kicked off by a tag being pushed. If you set up the step to be triggered in any other fashion it will not work unless you supply the version yourself. You can supply the version by providing an optional environment variable `VERSION` set to the version being released.
@@ -113,6 +115,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: "main"
+          token: ${{ secrets.RELEASE_TOKEN }}
       - name: Announce
         uses: docker://ponylang/release-bot-action:0.5.0
         with:
@@ -126,23 +131,4 @@ jobs:
 
 **N.B.** The environment variable `RELEASE_TOKEN` that is required by each step **must** be a personal access token with `public_repo` access. You can not use the `GITHUB_TOKEN` environment variable provided by GitHub's action environment. If you try to use `GITHUB_TOKEN`, no additional steps will trigger after start-a-release has completed.
 
-**N.B.** This action assumes that the default branch of your repository is named `main`. If it isn't named main, you will need to override that with an optional input parameter `default_branch`.
-
-For example, if your repository's default branch is called `trunk`, instead of having something like:
-
-```yml
-        with:
-          entrypoint: announce-a-release.bash
-          git_user_name: "Ponylang Main Bot"
-          git_user_email: "ponylang.main@gmail.com"
-```
-
-you would update to:
-
-```yml
-        with:
-          entrypoint: announce-a-release.bash
-          git_user_name: "Ponylang Main Bot"
-          git_user_email: "ponylang.main@gmail.com"
-          default_branch: "trunk"
-```
+**N.B.** you should set the `ref` input value to `actions/checkout@v2` to whatever the default branch of your repository is. The examples above assume that your default branch name is `main`.

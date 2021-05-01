@@ -29,8 +29,9 @@ Starts the release process.
 There are several "pre-release" step commands that can be used together in a job to execute various pre-release updates:
 
 - update-changelog-for-release.bash
+- add-unreleased-section-to-changelog.bash
 
-Every project that includes a standard Pony CHANGELOG.md should include this step.
+Every project that includes a standard Pony CHANGELOG.md should include these steps.
 
 - update-version-corral-json.bash
 
@@ -52,11 +53,16 @@ on:
     tags: release-\d+.\d+.\d+
 
 jobs:
-  prepare-for-release:
-    name: Prepare for a release
+  # all tasks that need to be done before we add an X.Y.Z tag
+  # should be done as a step in the pre-tagging job.
+  # think of it like this... if when you later checkout the tag for a release,
+  # should the change be there? if yes, do it here.
+  pre-tagging:
+    name: Tasks run before tagging the release
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout main
+        uses: actions/checkout@v2
         with:
           ref: "main"
           token: ${{ secrets.RELEASE_TOKEN }}
@@ -72,10 +78,49 @@ jobs:
           entrypoint: update-version-in-VERSION.bash
           git_user_name: "Ponylang Main Bot"
           git_user_email: "ponylang.main@gmail.com"
+
+  # tag for release
+  # this will kick off the next stage of the release process
+  # no additional steps should be added to this job
+  tag-release:
+    name: Tag the release
+    needs:
+      - pre-tagging
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v2
+        with:
+          ref: "main"
+          token: ${{ secrets.RELEASE_TOKEN }}
       - name: Trigger artifact creation
         uses: docker://ponylang/release-bot-action:0.5.0
         with:
           entrypoint: trigger-artifact-creation.bash
+          git_user_name: "Ponylang Main Bot"
+          git_user_email: "ponylang.main@gmail.com"
+
+  # all cleanup tags that should happen after tagging for release should happen
+  # in the post-tagging job. examples of things you might do:
+  # add a new unreleased section to a changelog
+  # set a version back to "snapshot"
+  # in general, post-tagging is for "going back to normal" from tasks that were
+  # done during the pre-tagging job
+  post-tagging:
+    name: Tasks run after tagging the release
+    needs:
+      - tag-release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v2
+        with:
+          ref: "main"
+          token: ${{ secrets.RELEASE_TOKEN }}
+      - name: Add "unreleased" section to CHANGELOG.md
+        uses: docker://ponylang/release-bot-action:0.5.0
+        with:
+          entrypoint: add-unreleased-section-to-changelog.bash
           git_user_name: "Ponylang Main Bot"
           git_user_email: "ponylang.main@gmail.com"
 ```

@@ -21,6 +21,10 @@
 
 set -o errexit
 
+git config --global user.name "${INPUT_GIT_USER_NAME}"
+git config --global user.email "${INPUT_GIT_USER_EMAIL}"
+git config --global push.default simple
+
 # Verify ENV is set up correctly
 # We validate all that need to be set in case, in an absolute emergency,
 # we need to run this by hand. Otherwise the GitHub actions environment should

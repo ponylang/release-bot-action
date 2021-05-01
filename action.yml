@@ -4,9 +4,6 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
 inputs:
-  step:
-    description: 'start-a-release, trigger-release-announcement, or announce-a-release'
-    required: true
   git_user_name:
     description: 'Name to associate with commits.'
     required: true

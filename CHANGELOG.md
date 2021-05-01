@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Changed
 
+- Replace "step" input parameter with overriding of entrypoint ([PR #33](https://github.com/ponylang/release-bot-action/pull/33))
 
 ## [0.5.0] - 2021-03-09
 

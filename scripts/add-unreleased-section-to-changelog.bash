@@ -1,12 +1,11 @@
 #!/bin/bash
 
-# Kicks off "actual release process" by creating a tag in the form X.Y.Z
-# and cleans finishes off the "pre-release steps" by deleting the
-# "release-X.Y.Z" tag that triggers the beginning stages of a release.
+# Add an "unreleased" section to the CHANGELOG.
 #
 # Tools required in the environment that runs this:
 #
 # - bash
+# - changelog-tool
 # - git
 
 set -o errexit
@@ -37,13 +36,13 @@ set -o nounset
 # Version: "1.0.0"
 VERSION="${GITHUB_REF/refs\/tags\/release-/}"
 
-# tag release
-echo -e "\e[34mTagging for release to kick off creating artifacts\e[0m"
-git tag -a "${VERSION}" -m "Version ${VERSION}"
+# update CHANGELOG for new entries
+echo -e "\e[34mAdding new 'unreleased' section to CHANGELOG.md\e[0m"
+changelog-tool unreleased -e
 
-echo -e "\e[34mPushing ${VERSION} tag\e[0m"
-git push origin "${VERSION}"
+echo -e "\e[34mCommiting CHANGELOG.md change\e[0m"
+git add CHANGELOG.md
+git commit -m "Add unreleased section to CHANGELOG post ${VERSION} release"
 
-# delete release-VERSION tag
-echo -e "\e[34mDeleting no longer needed remote tag release-${VERSION}\e[0m"
-git push --delete origin "release-${VERSION}"
+echo -e "\e[34mPushing CHANGELOG.md changes\e[0m"
+git push

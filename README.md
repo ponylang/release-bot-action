@@ -46,7 +46,7 @@ jobs:
       - name: Start
         uses: docker://ponylang/release-bot-action:0.5.0
         with:
-          step: start-a-release
+          entrypoint: start-a-release.bash
           git_user_name: "Ponylang Main Bot"
           git_user_email: "ponylang.main@gmail.com"
         env:
@@ -81,7 +81,7 @@ jobs:
       - name: Trigger
         uses: docker://ponylang/release-bot-action:0.5.0
         with:
-          step: trigger-release-announcement
+          entrypoint: trigger-release-announcement.bash
           git_user_name: "Ponylang Main Bot"
           git_user_email: "ponylang.main@gmail.com"
         env:
@@ -116,7 +116,7 @@ jobs:
       - name: Announce
         uses: docker://ponylang/release-bot-action:0.5.0
         with:
-          step: announce-a-release
+          entrypoint: announce-a-release.bash
           git_user_name: "Ponylang Main Bot"
           git_user_email: "ponylang.main@gmail.com"
         env:
@@ -132,7 +132,7 @@ For example, if your repository's default branch is called `trunk`, instead of h
 
 ```yml
         with:
-          step: announce-a-release
+          entrypoint: announce-a-release.bash
           git_user_name: "Ponylang Main Bot"
           git_user_email: "ponylang.main@gmail.com"
 ```
@@ -141,7 +141,7 @@ you would update to:
 
 ```yml
         with:
-          step: announce-a-release
+          entrypoint: announce-a-release.bash
           git_user_name: "Ponylang Main Bot"
           git_user_email: "ponylang.main@gmail.com"
           default_branch: "trunk"

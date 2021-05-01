@@ -10,7 +10,3 @@ inputs:
   git_user_email:
     description: 'Email to associate with commits.'
     required: true
-  default_branch:
-    description: 'Main branch for your repo.'
-    required: false
-    default: 'main'

@@ -41,19 +41,6 @@ if [[ -z "${GITHUB_REPOSITORY}" ]]; then
   exit 1
 fi
 
-if [[ -z "${RELEASE_TOKEN}" ]]; then
-  echo -e "\e[31mA personal access token needs to be set in RELEASE_TOKEN."
-  echo -e "\e[31mIt should not be secrets.GITHUB_TOKEN. It has to be a"
-  echo -e "\e[31mpersonal access token otherwise next steps in the release"
-  echo -e "\e[31mprocess WILL NOT trigger."
-  echo -e "\e[31mPersonal access tokens are in the form:"
-  echo -e "\e[31m     TOKEN"
-  echo -e "\e[31mfor example:"
-  echo -e "\e[31m     1234567890"
-  echo -e "\e[31mExiting.\e[0m"
-  exit 1
-fi
-
 if [[ -z "${ZULIP_TOKEN}" ]]; then
   echo -e "\e[31mA Zulip access token needs to be set in ZULIP_TOKEN."
   echo -e "Exiting.\e[0m"
@@ -63,8 +50,6 @@ fi
 # no unset variables allowed from here on out
 # allow above so we can display nice error messages for expected unset variables
 set -o nounset
-
-PUSH_TO="https://${RELEASE_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
 
 # Extract version from tag reference
 # Tag ref version: "refs/tags/announce-1.0.0"
@@ -171,11 +156,10 @@ fi
 
 # delete announce-VERSION tag
 echo -e "\e[34mDeleting no longer needed remote tag announce-${VERSION}\e[0m"
-git push --delete "${PUSH_TO}" "announce-${VERSION}"
+git push --delete origin "announce-${VERSION}"
 
 # This doesn't account for the default branch changing commit. It assumes we
 # are HEAD or can otherwise push without issue.
-git checkout "${INPUT_DEFAULT_BRANCH}"
 git pull
 
 # rotate next-release.md content
@@ -186,5 +170,5 @@ if test -f ".release-notes/next-release.md"; then
   git add .release-notes/*
   git commit -m "Rotate release notes as part of ${VERSION} release"
   echo -e "\e[34mPushing release notes changes\e[0m"
-  git push "${PUSH_TO}" "${INPUT_DEFAULT_BRANCH}"
+  git push
 fi

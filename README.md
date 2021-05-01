@@ -22,34 +22,60 @@ Once announce-a-release has completed, the release process is done. For more in-
 
 ## Example workflows
 
-### start-a-release
+### Prepare for release
 
 Starts the release process.
 
-Requires that your repo have Pony standard CHANGELOG and VERSION files.
+There are several "pre-release" step commands that can be used together in a job to execute various pre-release updates:
 
-**start-a-release.yml**:
+- update-changelog-for-release.bash
+
+Every project that includes a standard Pony CHANGELOG.md should include this step.
+
+- update-version-corral-json.bash
+
+All Pony library projects should include this step.
+
+- update-version-in-VERSION.bash
+
+All standard Pony projects that include a VERSION file should include this step.
+
+In addition to the "prepare for release" step commands, there is a final "trigger" command that must be run after all the other steps. If the trigger step, `trigger-artifact-creation.bash` isn't run. Then the release process will not actually start.
+
+**prepare-for-a-release.yml**:
 
 ```yml
-name: Start a release
+name: Prepare for a release
 
 on:
   push:
     tags: release-\d+.\d+.\d+
 
 jobs:
-  start-a-release:
-    name: Start a release
+  prepare-for-release:
+    name: Prepare for a release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
           ref: "main"
           token: ${{ secrets.RELEASE_TOKEN }}
-      - name: Start
+      - name: Update CHANGELOG.md
         uses: docker://ponylang/release-bot-action:0.5.0
         with:
-          entrypoint: start-a-release.bash
+          entrypoint: update-changelog-for-release.bash
+          git_user_name: "Ponylang Main Bot"
+          git_user_email: "ponylang.main@gmail.com"
+      - name: Update VERSION
+        uses: docker://ponylang/release-bot-action:0.5.0
+        with:
+          entrypoint: update-version-in-VERSION.bash
+          git_user_name: "Ponylang Main Bot"
+          git_user_email: "ponylang.main@gmail.com"
+      - name: Trigger artifact creation
+        uses: docker://ponylang/release-bot-action:0.5.0
+        with:
+          entrypoint: trigger-artifact-creation.bash
           git_user_name: "Ponylang Main Bot"
           git_user_email: "ponylang.main@gmail.com"
 ```

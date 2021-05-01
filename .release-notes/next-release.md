@@ -36,3 +36,16 @@ The aforementioned configuration from above would now be:
           git_user_email: "ponylang.main@gmail.com"
 ```
 
+## Switch supported actions/checkout from v1 to v2
+
+We've switched from supporting `actions/checkout@v1` to `actions/checkout@v2`.
+
+The are a few changes to configuration of release-bot that come along with this change. You should check out the examples in the README.md to see the latest on how to configure.
+
+Highlights of changes:
+
+- Use `actions/checkout@v2`
+- `action/checkout` requires the setting `token` and `ref` values.
+- Most workflows no longer require a release token being passed to the action, only to `actions/checkout`.
+- Workflows no longer take a default branch. The default branch is now handled by `actions/checkout@v2`.
+

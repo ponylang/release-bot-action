@@ -78,6 +78,12 @@ jobs:
           entrypoint: update-version-in-VERSION.bash
           git_user_name: "Ponylang Main Bot"
           git_user_email: "ponylang.main@gmail.com"
+      - name: Update version in README
+        uses: docker://ponylang/release-bot-action:0.5.0
+        with:
+          entrypoint: update-version-in-README.py
+          git_user_name: "Ponylang Main Bot"
+          git_user_email: "ponylang.main@gmail.com"
 
   # tag for release
   # this will kick off the next stage of the release process

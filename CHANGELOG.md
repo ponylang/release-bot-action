@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file. This projec
 ### Added
 
 - Create images on release ([PR #31](https://github.com/ponylang/release-bot-action/pull/31))
+- Add command to update the version in a README ([PR #37](https://github.com/ponylang/release-bot-action/pull/37))
 
 ### Changed
 

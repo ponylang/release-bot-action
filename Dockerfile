@@ -15,6 +15,12 @@ RUN apk add --update --no-cache \
   curl \
   jq \
   git \
-  grep
+  grep \
+  py3-pip
+
+
+RUN pip3 install \
+  gitpython \
+  pylint
 
 ENTRYPOINT ["/entrypoint.sh"]

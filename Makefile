@@ -16,4 +16,7 @@ push: build
 	docker push "${IMAGE}:${IMAGE_TAG}"
 	docker push "${IMAGE}:latest"
 
-.PHONY: build
+pylint: build
+	docker run --entrypoint pylint --rm "${IMAGE}:latest" /commands/update-version-in-README.py
+
+.PHONY: build push pylint

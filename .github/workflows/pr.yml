@@ -18,6 +18,14 @@ jobs:
           VALIDATE_MD: true
           VALIDATE_YAML: true
 
+  lint-python-commands:
+    name: Lint python commands
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: pylint
+        run: make pylint
+
   validate-docker-image-builds:
     name: Validate Docker image builds
     runs-on: ubuntu-latest

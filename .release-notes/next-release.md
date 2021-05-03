@@ -79,3 +79,32 @@ Other commands will be forthcoming.
 
 A new "readme version updater" command is now available for use as a pre-tagging step. The command is based on the [readme-version-updater-action](https://github.com/ponylang/readme-version-updater-action).
 
+## Add command to update the runner in action.yml files
+
+The best way to run a released GitHub action is to use a prebuilt docker
+image. This saves time with building the image and guarantees that each
+run will be using exactly the same action code.
+
+This is best accomplished by settings runs.image to the image in question
+in action.yml.
+
+However, this does have a drawback of not being able to use arbitrary commits
+to run with as that commit will be grabbed BUT... the image in its action.yml
+will be used. This is problematic for testing actions.
+
+The two commands included in this commit address both issues.
+
+### update-action-to-use-docker-image-to-run-action.py
+
+Updates runs.image to a docker image with the version we are releasing.
+As part of the release process for an action, it should then also make
+sure to push a prebuilt image to DockerHub for the action in question.
+
+This command should be run in the pre-tagging job.
+
+### update-action-to-use-dockerfile-to-run-action.py
+
+Switches back to using `Dockerfile` for how to run the action.
+
+This command should be run in the post-tagging job.
+

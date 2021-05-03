@@ -18,9 +18,9 @@ RUN apk add --update --no-cache \
   grep \
   py3-pip
 
-
 RUN pip3 install \
   gitpython \
-  pylint
+  pylint \
+  pyyaml
 
 ENTRYPOINT ["/entrypoint.sh"]

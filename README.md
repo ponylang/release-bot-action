@@ -67,19 +67,19 @@ jobs:
           ref: "main"
           token: ${{ secrets.RELEASE_TOKEN }}
       - name: Update CHANGELOG.md
-        uses: docker://ponylang/release-bot-action:0.5.0
+        uses: ponylang/release-bot-action@0.5.0
         with:
           entrypoint: update-changelog-for-release.bash
           git_user_name: "Ponylang Main Bot"
           git_user_email: "ponylang.main@gmail.com"
       - name: Update VERSION
-        uses: docker://ponylang/release-bot-action:0.5.0
+        uses: ponylang/release-bot-action@0.5.0
         with:
           entrypoint: update-version-in-VERSION.bash
           git_user_name: "Ponylang Main Bot"
           git_user_email: "ponylang.main@gmail.com"
       - name: Update version in README
-        uses: docker://ponylang/release-bot-action:0.5.0
+        uses: ponylang/release-bot-action@0.5.0
         with:
           entrypoint: update-version-in-README.py
           git_user_name: "Ponylang Main Bot"
@@ -100,7 +100,7 @@ jobs:
           ref: "main"
           token: ${{ secrets.RELEASE_TOKEN }}
       - name: Trigger artifact creation
-        uses: docker://ponylang/release-bot-action:0.5.0
+        uses: ponylang/release-bot-action@0.5.0
         with:
           entrypoint: trigger-artifact-creation.bash
           git_user_name: "Ponylang Main Bot"
@@ -124,7 +124,7 @@ jobs:
           ref: "main"
           token: ${{ secrets.RELEASE_TOKEN }}
       - name: Add "unreleased" section to CHANGELOG.md
-        uses: docker://ponylang/release-bot-action:0.5.0
+        uses: ponylang/release-bot-action@0.5.0
         with:
           entrypoint: add-unreleased-section-to-changelog.bash
           git_user_name: "Ponylang Main Bot"
@@ -160,7 +160,7 @@ jobs:
           ref: "main"
           token: ${{ secrets.RELEASE_TOKEN }}
       - name: Trigger
-        uses: docker://ponylang/release-bot-action:0.5.0
+        uses: ponylang/release-bot-action@0.5.0
         with:
           entrypoint: trigger-release-announcement.bash
           git_user_name: "Ponylang Main Bot"
@@ -196,7 +196,7 @@ jobs:
           ref: "main"
           token: ${{ secrets.RELEASE_TOKEN }}
       - name: Announce
-        uses: docker://ponylang/release-bot-action:0.5.0
+        uses: ponylang/release-bot-action@0.5.0
         with:
           entrypoint: announce-a-release.bash
           git_user_name: "Ponylang Main Bot"

@@ -62,6 +62,7 @@ with open(readme_file, "r+") as readme:
         text = re.sub(find, replace, text)
     readme.seek(0)
     readme.write(text)
+    readme.truncate()
 
 print(INFO + "Adding git changes." + ENDC)
 git.add(readme_file)

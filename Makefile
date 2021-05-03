@@ -6,6 +6,8 @@ else
   IMAGE_TAG := $(tag)
 endif
 
+PYTHON_COMMANDS := $(shell find $(SRC_DIR) -name *.py)
+
 all: build
 
 build:
@@ -16,7 +18,10 @@ push: build
 	docker push "${IMAGE}:${IMAGE_TAG}"
 	docker push "${IMAGE}:latest"
 
-pylint: build
-	docker run --entrypoint pylint --rm "${IMAGE}:latest" /commands/update-version-in-README.py
+pylint: build $(PYTHON_COMMANDS)
+	$(foreach file, $(notdir $(PYTHON_COMMANDS)), \
+		echo "Linting $(file)"; \
+		docker run --entrypoint pylint --rm "${IMAGE}:latest" /commands/$(file); \
+	)
 
 .PHONY: build push pylint

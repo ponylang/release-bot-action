@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file. This projec
 
 - Create images on release ([PR #31](https://github.com/ponylang/release-bot-action/pull/31))
 - Add command to update the version in a README ([PR #37](https://github.com/ponylang/release-bot-action/pull/37))
+- Add command to update the runner in action.yml files ([PR #38](https://github.com/ponylang/release-bot-action/pull/38))
 
 ### Changed
 

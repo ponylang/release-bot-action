@@ -4,9 +4,9 @@
 #
 # - Creates announce-X.Y.Z tag and pushes to remote repo
 #
-# This script should be set up in CI to only run after all build artifact
+# This script should be set up in CI to only run after all build artefact
 # creation tasks have successfully run. It is built to be a separate script
-# and ci step so that multi-artifacts could in theory be created and uploaded
+# and ci step so that multi-artefacts could in theory be created and uploaded
 # before a release is announced.
 #
 # Tools required in the environment that runs this:

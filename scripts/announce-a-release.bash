@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Announces a release after artifacts have been built:
+# Announces a release after artefacts have been built:
 #
 # - Publishes release notes to GitHub
 # - Announces in the #announce stream of Zulip

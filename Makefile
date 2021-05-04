@@ -10,9 +10,10 @@ PYTHON_COMMANDS := $(shell find $(SRC_DIR) -name *.py)
 
 all: build
 
-build:
+build: action.yml Dockerfile entrypoint.sh scripts/*
 	docker build --pull -t "${IMAGE}:${IMAGE_TAG}" .
 	docker build --pull -t "${IMAGE}:latest" .
+	touch $@
 
 push: build
 	docker push "${IMAGE}:${IMAGE_TAG}"
@@ -24,4 +25,4 @@ pylint: build $(PYTHON_COMMANDS)
 		docker run --entrypoint pylint --rm "${IMAGE}:latest" /commands/$(file); \
 	)
 
-.PHONY: build push pylint
+.PHONY: push

@@ -148,7 +148,25 @@ on:
       - \d+.\d+.\d+
 
 jobs:
+  # validation to assure that we should in fact continue with the release should
+  # be done here. the primary reason for this step is to verify that the release
+  # was started correctly by pushing a `release-X.Y.Z` tag rather than `X.Y.Z`.
+  pre-artefact-creation:
+    name: Tasks to run before artefact creation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v2
+        with:
+          ref: "main"
+          token: ${{ secrets.RELEASE_TOKEN }}
+      - name: Validate CHANGELOG
+        uses: ponylang/release-bot-action@0.5.0
+        with:
+          entrypoint: pre-artefact-changelog-check.bash
+
   # Artefact building steps go here
+  # they should all depend on the `pre-artefact-creation` job finishing
 
   trigger-release-announcement:
     name: Trigger release announcement

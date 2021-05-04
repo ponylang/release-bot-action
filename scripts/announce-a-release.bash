@@ -16,10 +16,6 @@
 
 set -o errexit
 
-git config --global user.name "${INPUT_GIT_USER_NAME}"
-git config --global user.email "${INPUT_GIT_USER_EMAIL}"
-git config --global push.default simple
-
 # Verify ENV is set up correctly
 # We validate all that need to be set in case, in an absolute emergency,
 # we need to run this by hand. Otherwise the GitHub actions environment should
@@ -46,6 +42,28 @@ if [[ -z "${ZULIP_TOKEN}" ]]; then
   echo -e "Exiting.\e[0m"
   exit 1
 fi
+
+if [[ -z "${INPUT_GIT_USER_NAME}" ]]; then
+  echo -e "\e[31mThe user name associated with git commits needs to be set in "
+  echo -e "\e[31mINPUT_GIT_USER_NAME."
+  echo -e "\e[31mIn a workflow, the would be set by creating a 'with' block "
+  echo -e "\e[32mand providing 'git_user_name'."
+  echo -e "\e[31mExiting.\e[0m"
+  exit 1
+fi
+
+if [[ -z "${INPUT_GIT_USER_EMAIL}" ]]; then
+  echo -e "\e[31mThe email address associated with git commits needs to be set "
+  echo -e "\e[31min INPUT_GIT_USER_EMAIL."
+  echo -e "\e[31mIn a workflow, the would be set by creating a 'with' block "
+  echo -e "\e[32mand providing 'git_user_email'."
+  echo -e "\e[31mExiting.\e[0m"
+  exit 1
+fi
+
+git config --global user.name "${INPUT_GIT_USER_NAME}"
+git config --global user.email "${INPUT_GIT_USER_EMAIL}"
+git config --global push.default simple
 
 # no unset variables allowed from here on out
 # allow above so we can display nice error messages for expected unset variables

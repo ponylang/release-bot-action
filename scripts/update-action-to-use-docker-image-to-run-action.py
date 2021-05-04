@@ -15,6 +15,21 @@ ERROR = '\033[31m'
 INFO = '\033[34m'
 NOTICE = '\033[33m'
 
+# validate env
+if 'INPUT_GIT_USER_NAME' not in os.environ:
+    print(ERROR + "INPUT_GIT_USER_NAME needs to be set in env." + ENDC)
+    print(ERROR + "It can be set in a GitHub action by passing" + ENDC)
+    print(ERROR + "`git_user_name` to the step in a `with` block." + ENDC)
+    print(ERROR + "Exiting." + ENDC)
+    sys.exit(1)
+
+if 'INPUT_GIT_USER_EMAIL' not in os.environ:
+    print(ERROR + "INPUT_GIT_USER_EMAIL needs to be set in env." + ENDC)
+    print(ERROR + "It can be set in a GitHub action by passing" + ENDC)
+    print(ERROR + "`git_user_name` to the step in a `with` block." + ENDC)
+    print(ERROR + "Exiting." + ENDC)
+    sys.exit(1)
+
 # validate action.yml exists
 if not os.path.isfile("action.yml"):
     print(ERROR + "Unable to find action.yml. Exiting." + ENDC)

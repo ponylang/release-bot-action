@@ -108,3 +108,9 @@ Switches back to using `Dockerfile` for how to run the action.
 
 This command should be run in the post-tagging job.
 
+## Add preartefact-changelog-check.bash command
+
+The preartefact-changelog-check.bash command validates that the changelog contains an entry for `X.Y.Z` where `X.Y.Z` is the release that is underway.
+
+The command can be used to protect against misconfiguration of workflows and more importantly, a user inadvertently pushing a `X.Y.Z` tag to start a release rather than the correct `release-X.Y.Z`.
+

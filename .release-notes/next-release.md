@@ -68,7 +68,7 @@ Rather than shove more and more functionality into a single script, start-a-rele
 Those new commands covered in detail in our updated `prepare-for-a-release` example in README.md. The new step commands are:
 
 - add-unreleased-section-to-changelog.bash
-- triger-artifact-creation.bash
+- triger-artefact-creation.bash
 - update-changelog-for-release.bash
 - update-version-corral-json.bash
 - update-version-in-VERSION.bash

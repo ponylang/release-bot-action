@@ -38,7 +38,7 @@ set -o nounset
 VERSION="${GITHUB_REF/refs\/tags\/release-/}"
 
 # tag release
-echo -e "\e[34mTagging for release to kick off creating artifacts\e[0m"
+echo -e "\e[34mTagging for release to kick off creating artefacts\e[0m"
 git tag -a "${VERSION}" -m "Version ${VERSION}"
 
 echo -e "\e[34mPushing ${VERSION} tag\e[0m"

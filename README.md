@@ -10,7 +10,7 @@ When the tag is pushed, it will trigger the start-a-release section of the workf
 
 Each library or application will have it's own release steps that are needed. They should be supplied as a series of steps in a **release.yml** (see below). Each of those steps will be a requirement to trigger the trigger-release-announcement step.
 
-trigger-release-announcement pushes a new tag `announce-x.y.z` that will trigger the next and final step in the process. The trigger-release-announcement step exists so that if any build artifact portion of the release process fails, it can be completed by hand and then, a human can push a `announce-x.y.z` tag to start the final step in the release process.
+trigger-release-announcement pushes a new tag `announce-x.y.z` that will trigger the next and final step in the process. The trigger-release-announcement step exists so that if any build artefact portion of the release process fails, it can be completed by hand and then, a human can push a `announce-x.y.z` tag to start the final step in the release process.
 
 announce-a-release will post:
 
@@ -41,7 +41,7 @@ All Pony library projects should include this step.
 
 All standard Pony projects that include a VERSION file should include this step.
 
-In addition to the "prepare for release" step commands, there is a final "trigger" command that must be run after all the other steps. If the trigger step, `trigger-artifact-creation.bash` isn't run. Then the release process will not actually start.
+In addition to the "prepare for release" step commands, there is a final "trigger" command that must be run after all the other steps. If the trigger step, `trigger-artefact-creation.bash` isn't run. Then the release process will not actually start.
 
 **prepare-for-a-release.yml**:
 
@@ -99,10 +99,10 @@ jobs:
         with:
           ref: "main"
           token: ${{ secrets.RELEASE_TOKEN }}
-      - name: Trigger artifact creation
+      - name: Trigger artefact creation
         uses: ponylang/release-bot-action@0.5.0
         with:
-          entrypoint: trigger-artifact-creation.bash
+          entrypoint: trigger-artefact-creation.bash
           git_user_name: "Ponylang Main Bot"
           git_user_email: "ponylang.main@gmail.com"
 
@@ -135,7 +135,7 @@ jobs:
 
 Triggers the announcement of the release.
 
-Should be run after all release artifact building steps are done. For an application, this would mean that all artifacts have been uploaded to Cloudsmith and any Docker images were built.
+Should be run after all release artefact building steps are done. For an application, this would mean that all artefacts have been uploaded to Cloudsmith and any Docker images were built.
 
 **release.yml**:
 
@@ -148,12 +148,12 @@ on:
       - \d+.\d+.\d+
 
 jobs:
-  # Artifact building steps go here
+  # Artefact building steps go here
 
   trigger-release-announcement:
     name: Trigger release announcement
     runs-on: ubuntu-latest
-    needs: [ARTIFACT_BUILDING_STEPS_HERE]
+    needs: [ARTEFACT_BUILDING_STEPS_HERE]
     steps:
       - uses: actions/checkout@v2
         with:
@@ -171,7 +171,7 @@ trigger-release-announcement, by default, will extract the version being release
 
 ## announce-a-release
 
-Announces a release after artifacts have been built:
+Announces a release after artefacts have been built:
 
 - Publishes release notes to GitHub
 - Announces in the #announce stream of Zulip

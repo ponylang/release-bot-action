@@ -1,0 +1,49 @@
+#!/usr/bin/python3
+# pylint: disable=C0103
+# pylint: disable=C0114
+
+import os
+import re
+import sys
+import zulip
+
+ENDC = '\033[0m'
+ERROR = '\033[31m'
+INFO = '\033[34m'
+NOTICE = '\033[33m'
+
+# validate env
+if 'ZULIP_API_KEY' not in os.environ:
+    print(ERROR + "ZULIP_API_KEY needs to be set in env. Exiting." + ENDC)
+    sys.exit(1)
+
+if 'ZULIP_EMAIL' not in os.environ:
+    print(ERROR + "ZULIP_EMAIL needs to be set in env. Exiting." + ENDC)
+    sys.exit(1)
+
+# version is in the form of "refs/tags/release-1.0.0" where the version is 1.0.0
+version = re.sub('refs/tags/announce-', '', os.environ['GITHUB_REF'])
+
+release_repo = os.environ['GITHUB_REPOSITORY']
+message = (
+    f'Version {version} of {release_repo} has been released.'
+    f"\n\n"
+    f'See the '
+    f'[release notes](https://github.com/{release_repo}/releases/tag/{version})'
+    f' for more details.'
+)
+
+client = zulip.Client(site='ponylang.zulipchat.com',
+    api_key=os.environ['ZULIP_API_KEY'],
+    email=os.environ['ZULIP_EMAIL'])
+
+request = {
+    'type': 'stream',
+    'to': 'announce',
+    'topic': release_repo,
+    'content': message,
+}
+
+print(INFO + "Sending announcement to Zulip..." + ENDC)
+client.send_message(request)
+print(INFO + "Announcement sent." + ENDC)

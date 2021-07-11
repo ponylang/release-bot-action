@@ -1,0 +1,61 @@
+#!/usr/bin/python3
+# pylint: disable=C0103
+# pylint: disable=C0114
+
+import os
+from pathlib import Path
+import re
+import subprocess
+import sys
+from github import Github
+
+ENDC = '\033[0m'
+ERROR = '\033[31m'
+INFO = '\033[34m'
+NOTICE = '\033[33m'
+
+# validate env
+if 'RELEASE_TOKEN' not in os.environ:
+    print(ERROR + "RELEASE_TOKEN needs to be set in env. Exiting." + ENDC)
+    sys.exit(1)
+
+# version is in the form of "refs/tags/release-1.0.0" where the version is 1.0.0
+version = re.sub('refs/tags/announce-', '', os.environ['GITHUB_REF'])
+
+release_repo = os.environ['GITHUB_REPOSITORY']
+
+print(INFO + "Preparing to update GitHub release notes..." + ENDC)
+
+release_notes = ""
+if os.path.isfile('.release-notes/next-release.md'):
+    print(INFO + "next-release.md found. Adding entries to release notes." + ENDC)
+    release_notes = Path('.release-notes/next-release.md').read_text() + "\n"
+else:
+    print(INFO + "No next-release.md found." + ENDC)
+
+
+if os.path.isfile('CHANGELOG.md'):
+    print(INFO + "CHANGELOG.md found. Adding entries to release notes." + ENDC)
+
+    try:
+        result = subprocess.run(['changelog-tool', 'get', version],
+            capture_output=True,
+            text=True,
+            check=True)
+        release_notes += result.stdout
+    except subprocess.CalledProcessError as e:
+        print(ERROR + "Unable to version for release." + ENDC)
+        print(ERROR + e.stdout + ENDC)
+        print(ERROR + e.stderr + ENDC)
+        print(ERROR + "Exiting." + ENDC)
+        sys.exit(1)
+else:
+    print(INFO + "No CHANGELOG.md found." + ENDC)
+
+
+g = Github(os.environ['RELEASE_TOKEN'])
+repo = g.get_repo(os.environ['GITHUB_REPOSITORY'])
+
+print(INFO + "Uploading release notes..." + ENDC)
+repo.create_git_release(version, version, release_notes)
+print(INFO + "Release notes uploaded." + ENDC)

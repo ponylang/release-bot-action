@@ -3,16 +3,15 @@ FROM alpine:3.12
 
 RUN apk add --update --no-cache \
   bash \
-  curl \
-  jq \
   git \
-  grep \
   py3-pip
 
 RUN pip3 install \
   gitpython \
+  pygithub==1.54.1 \
   pylint \
-  pyyaml
+  pyyaml \
+  zulip
 
 COPY --from=changelog-tool /usr/local/bin/changelog-tool /usr/local/bin/changelog-tool
 

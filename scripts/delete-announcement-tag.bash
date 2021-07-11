@@ -24,7 +24,7 @@ fi
 
 if [[ -z "${GIT_USER_NAME}" ]]; then
   echo -e "\e[31mThe user name associated with git commits needs to be set in "
-  echo -e "\e[31mGIT_USER_NAME.""
+  echo -e "\e[31mGIT_USER_NAME."
   echo -e "\e[31mExiting.\e[0m"
   exit 1
 fi

@@ -189,11 +189,23 @@ trigger-release-announcement, by default, will extract the version being release
 
 ## announce-a-release
 
-Announces a release after artefacts have been built:
+Announces the release in a variety of channels.
 
-- Publishes release notes to GitHub
-- Announces in the #announce stream of Zulip
-- Adds a note about the release to LWIP
+There are currently three possible channels that you can announce your release: GitHub release notes, the Ponylang Zulip, and the Pony newsletter "Last Week In Pony". There are corresponding commands for each.
+
+- publish-release-notes-to-github.bash
+- send-announcement-to-pony-zulip.bash
+- add-announcement-to-last-week-in-pony.bash
+
+In addition there are normal cleanup actions that need to be taken as part of the release process and should be done after all announcements are done.
+
+- rotate-release-notes.bash
+
+Any project that uses release notes needs to run this command as part of post-announcement cleanup.
+
+- delete-announcement-tag.bash
+
+All projects should run this command to clean up the tag used to trigger the announce-a-release step. `delete-announcement-tag.bash` should be run after all other announcement commands have been run as they all depend on the `announce-X.Y.Z` existing.
 
 **announce-a-release.yml**:
 
@@ -205,23 +217,57 @@ on:
     tags: announce-\d+.\d+.\d+
 
 jobs:
-  announce-a-release:
-    name: Announce a release
+  announce:
+    name: Announcements
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout main
+        uses: actions/checkout@v2
         with:
           ref: "main"
           token: ${{ secrets.RELEASE_TOKEN }}
-      - name: Announce
+      - name: Release notes
         uses: ponylang/release-bot-action@0.5.0
         with:
-          entrypoint: announce-a-release.bash
-          git_user_name: "Ponylang Main Bot"
-          git_user_email: "ponylang.main@gmail.com"
+          entrypoint: publish-release-notes-to-github.bash
         env:
           RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+      - name: Zulip
+        uses: ponylang/release-bot-action@0.5.0
+        with:
+          entrypoint: send-announcement-to-pony-zulip.bash
+        env:
           ZULIP_TOKEN: ${{ secrets.ZULIP_TOKEN }}
+      - name: Last Week in Pony
+        uses: ponylang/release-bot-action@0.5.0
+        with:
+          entrypoint: add-announcement-to-last-week-in-pony.bash
+        env:
+          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+
+  post-announcement:
+    name: Tasks to run after the release has been announced
+    needs:
+      - announce
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v2
+        with:
+          ref: "main"
+          token: ${{ secrets.RELEASE_TOKEN }}
+      - name: Rotate release notes
+        uses: ponylang/release-bot-action@0.5.0
+        with:
+          entrypoint: rotate-release-notes.bash
+          git_user_name: "Ponylang Main Bot"
+          git_user_email: "ponylang.main@gmail.com"
+      - name: Delete announcement trigger tag
+        uses: ponylang/release-bot-action@0.5.0
+        with:
+          entrypoint: delete-announcement-tag.bash
+          git_user_name: "Ponylang Main Bot"
+          git_user_email: "ponylang.main@gmail.com"
 ```
 
 **N.B.** The environment variable `RELEASE_TOKEN` that is required by each step **must** be a personal access token with `public_repo` access. You can not use the `GITHUB_TOKEN` environment variable provided by GitHub's action environment. If you try to use `GITHUB_TOKEN`, no additional steps will trigger after start-a-release has completed.

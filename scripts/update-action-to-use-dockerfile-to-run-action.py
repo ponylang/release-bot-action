@@ -45,7 +45,7 @@ git.config('--global', 'branch.autosetuprebase', 'always')
 
 # open README and update with new version
 print(INFO + "Switching to Dockerfile as runner in action.yml" + ENDC)
-with open("action.yml", "r+") as action_yml:
+with open('action.yml', 'r+') as action_yml:
     text = yaml.safe_load(action_yml)
     text['runs']['image'] = 'Dockerfile'
     action_yml.seek(0)
@@ -53,8 +53,8 @@ with open("action.yml", "r+") as action_yml:
     action_yml.truncate()
 
 print(INFO + "Adding git changes." + ENDC)
-git.add("action.yml")
-if not git.status("-s"):
+git.add('action.yml')
+if not git.status('-s'):
     print(INFO + "No changes. Exiting." + ENDC)
     sys.exit(0)
 git.commit('-m',

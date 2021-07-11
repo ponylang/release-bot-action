@@ -17,19 +17,20 @@ jobs:
       - name: Release notes
         uses: ponylang/release-bot-action@main
         with:
-          entrypoint: publish-release-notes-to-github.bash
+          entrypoint: publish-release-notes-to-github.py
         env:
           RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
       - name: Zulip
         uses: ponylang/release-bot-action@main
         with:
-          entrypoint: send-announcement-to-pony-zulip.bash
+          entrypoint: send-announcement-to-pony-zulip.py
         env:
-          ZULIP_TOKEN: ${{ secrets.ZULIP_TOKEN }}
+          ZULIP_API_KEY: ${{ secrets.ZULIP_API_KEY }}
+          ZULIP_EMAIL: ${{ secrets.ZULIP_EMAIL }}
       - name: Last Week in Pony
         uses: ponylang/release-bot-action@main
         with:
-          entrypoint: add-announcement-to-last-week-in-pony.bash
+          entrypoint: add-announcement-to-last-week-in-pony.py
         env:
           RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
 
@@ -47,14 +48,14 @@ jobs:
       - name: Rotate release notes
         uses: ponylang/release-bot-action@main
         with:
-          entrypoint: rotate-release-notes.bash
+          entrypoint: rotate-release-notes.py
         env:
           GIT_USER_NAME: "Ponylang Main Bot"
           GIT_USER_EMAIL: "ponylang.main@gmail.com"
       - name: Delete announcement trigger tag
         uses: ponylang/release-bot-action@main
         with:
-          entrypoint: delete-announcement-tag.bash
+          entrypoint: delete-announcement-tag.py
         env:
           GIT_USER_NAME: "Ponylang Main Bot"
           GIT_USER_EMAIL: "ponylang.main@gmail.com"

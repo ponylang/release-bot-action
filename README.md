@@ -70,20 +70,23 @@ jobs:
         uses: ponylang/release-bot-action@0.5.0
         with:
           entrypoint: update-changelog-for-release.bash
-          git_user_name: "Ponylang Main Bot"
-          git_user_email: "ponylang.main@gmail.com"
+        env:
+          GIT_USER_NAME: "Ponylang Main Bot"
+          GIT_USER_EMAIL: "ponylang.main@gmail.com"
       - name: Update VERSION
         uses: ponylang/release-bot-action@0.5.0
         with:
           entrypoint: update-version-in-VERSION.bash
-          git_user_name: "Ponylang Main Bot"
-          git_user_email: "ponylang.main@gmail.com"
+        env:
+          GIT_USER_NAME: "Ponylang Main Bot"
+          GIT_USER_EMAIL: "ponylang.main@gmail.com"
       - name: Update version in README
         uses: ponylang/release-bot-action@0.5.0
         with:
           entrypoint: update-version-in-README.py
-          git_user_name: "Ponylang Main Bot"
-          git_user_email: "ponylang.main@gmail.com"
+        env:
+          GIT_USER_NAME: "Ponylang Main Bot"
+          GIT_USER_EMAIL: "ponylang.main@gmail.com"
 
   # tag for release
   # this will kick off the next stage of the release process
@@ -103,8 +106,9 @@ jobs:
         uses: ponylang/release-bot-action@0.5.0
         with:
           entrypoint: trigger-artefact-creation.bash
-          git_user_name: "Ponylang Main Bot"
-          git_user_email: "ponylang.main@gmail.com"
+        env:
+          GIT_USER_NAME: "Ponylang Main Bot"
+          GIT_USER_EMAIL: "ponylang.main@gmail.com"
 
   # all cleanup tags that should happen after tagging for release should happen
   # in the post-tagging job. examples of things you might do:
@@ -127,8 +131,9 @@ jobs:
         uses: ponylang/release-bot-action@0.5.0
         with:
           entrypoint: add-unreleased-section-to-changelog.bash
-          git_user_name: "Ponylang Main Bot"
-          git_user_email: "ponylang.main@gmail.com"
+        env:
+          GIT_USER_NAME: "Ponylang Main Bot"
+          GIT_USER_EMAIL: "ponylang.main@gmail.com"
 ```
 
 ## trigger-release-announcement
@@ -181,8 +186,9 @@ jobs:
         uses: ponylang/release-bot-action@0.5.0
         with:
           entrypoint: trigger-release-announcement.bash
-          git_user_name: "Ponylang Main Bot"
-          git_user_email: "ponylang.main@gmail.com"
+        env:
+          GIT_USER_NAME: "Ponylang Main Bot"
+          GIT_USER_EMAIL: "ponylang.main@gmail.com"
 ```
 
 trigger-release-announcement, by default, will extract the version being released from the GITHUB_REF environment variable. For this default action to work, trigger-release-announcement must be kicked off by a tag being pushed. If you set up the step to be triggered in any other fashion it will not work unless you supply the version yourself. You can supply the version by providing an optional environment variable `VERSION` set to the version being released.
@@ -260,14 +266,16 @@ jobs:
         uses: ponylang/release-bot-action@0.5.0
         with:
           entrypoint: rotate-release-notes.bash
-          git_user_name: "Ponylang Main Bot"
-          git_user_email: "ponylang.main@gmail.com"
+        env:
+          GIT_USER_NAME: "Ponylang Main Bot"
+          GIT_USER_EMAIL: "ponylang.main@gmail.com"
       - name: Delete announcement trigger tag
         uses: ponylang/release-bot-action@0.5.0
         with:
           entrypoint: delete-announcement-tag.bash
-          git_user_name: "Ponylang Main Bot"
-          git_user_email: "ponylang.main@gmail.com"
+        env:
+          GIT_USER_NAME: "Ponylang Main Bot"
+          GIT_USER_EMAIL: "ponylang.main@gmail.com"
 ```
 
 **N.B.** The environment variable `RELEASE_TOKEN` that is required by each step **must** be a personal access token with `public_repo` access. You can not use the `GITHUB_TOKEN` environment variable provided by GitHub's action environment. If you try to use `GITHUB_TOKEN`, no additional steps will trigger after start-a-release has completed.

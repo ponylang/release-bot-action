@@ -5,18 +5,56 @@ on:
     tags: announce-\d+.\d+.\d+
 
 jobs:
-  announce-a-release:
-    name: Announce a release
+  announce:
+    name: Announcements
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - name: Announce
+      - name: Checkout main
+        uses: actions/checkout@v2
+        with:
+          ref: "main"
+          token: ${{ secrets.RELEASE_TOKEN }}
+      - name: Release notes
         uses: ponylang/release-bot-action@main
         with:
-          step: announce-a-release
-          git_user_name: "Ponylang Main Bot"
-          git_user_email: "ponylang.main@gmail.com"
-          default_branch: "main"
+          entrypoint: publish-release-notes-to-github.bash
         env:
           RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+      - name: Zulip
+        uses: ponylang/release-bot-action@main
+        with:
+          entrypoint: send-announcement-to-pony-zulip.bash
+        env:
           ZULIP_TOKEN: ${{ secrets.ZULIP_TOKEN }}
+      - name: Last Week in Pony
+        uses: ponylang/release-bot-action@main
+        with:
+          entrypoint: add-announcement-to-last-week-in-pony.bash
+        env:
+          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+
+  post-announcement:
+    name: Tasks to run after the release has been announced
+    needs:
+      - announce
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v2
+        with:
+          ref: "main"
+          token: ${{ secrets.RELEASE_TOKEN }}
+      - name: Rotate release notes
+        uses: ponylang/release-bot-action@main
+        with:
+          entrypoint: rotate-release-notes.bash
+        env:
+          GIT_USER_NAME: "Ponylang Main Bot"
+          GIT_USER_EMAIL: "ponylang.main@gmail.com"
+      - name: Delete announcement trigger tag
+        uses: ponylang/release-bot-action@main
+        with:
+          entrypoint: delete-announcement-tag.bash
+        env:
+          GIT_USER_NAME: "Ponylang Main Bot"
+          GIT_USER_EMAIL: "ponylang.main@gmail.com"

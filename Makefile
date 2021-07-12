@@ -6,7 +6,7 @@ else
   IMAGE_TAG := $(tag)
 endif
 
-PYTHON_COMMANDS := $(shell find $(SRC_DIR) -name *.py)
+PYTHON_COMMANDS := $(shell find scripts/)
 
 all: build
 

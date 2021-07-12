@@ -28,20 +28,20 @@ Starts the release process.
 
 There are several "pre-release" step commands that can be used together in a job to execute various pre-release updates:
 
-- update-changelog-for-release.py
-- add-unreleased-section-to-changelog.py
+- update-changelog-for-release
+- add-unreleased-section-to-changelog
 
 Every project that includes a standard Pony CHANGELOG.md should include these steps.
 
-- update-version-corral-json.py
+- update-version-corral-json
 
 All Pony library projects should include this step.
 
-- update-version-in-VERSION.py
+- update-version-in-VERSION
 
 All standard Pony projects that include a VERSION file should include this step.
 
-In addition to the "prepare for release" step commands, there is a final "trigger" command that must be run after all the other steps. If the trigger step, `trigger-artefact-creation.py` isn't run. Then the release process will not actually start.
+In addition to the "prepare for release" step commands, there is a final "trigger" command that must be run after all the other steps. If the trigger step, `trigger-artefact-creation` isn't run. Then the release process will not actually start.
 
 **prepare-for-a-release.yml**:
 
@@ -69,21 +69,21 @@ jobs:
       - name: Update CHANGELOG.md
         uses: ponylang/release-bot-action@0.5.0
         with:
-          entrypoint: update-changelog-for-release.py
+          entrypoint: update-changelog-for-release
         env:
           GIT_USER_NAME: "Ponylang Main Bot"
           GIT_USER_EMAIL: "ponylang.main@gmail.com"
       - name: Update VERSION
         uses: ponylang/release-bot-action@0.5.0
         with:
-          entrypoint: update-version-in-VERSION.py
+          entrypoint: update-version-in-VERSION
         env:
           GIT_USER_NAME: "Ponylang Main Bot"
           GIT_USER_EMAIL: "ponylang.main@gmail.com"
       - name: Update version in README
         uses: ponylang/release-bot-action@0.5.0
         with:
-          entrypoint: update-version-in-README.py
+          entrypoint: update-version-in-README
         env:
           GIT_USER_NAME: "Ponylang Main Bot"
           GIT_USER_EMAIL: "ponylang.main@gmail.com"
@@ -105,7 +105,7 @@ jobs:
       - name: Trigger artefact creation
         uses: ponylang/release-bot-action@0.5.0
         with:
-          entrypoint: trigger-artefact-creation.py
+          entrypoint: trigger-artefact-creation
         env:
           GIT_USER_NAME: "Ponylang Main Bot"
           GIT_USER_EMAIL: "ponylang.main@gmail.com"
@@ -130,7 +130,7 @@ jobs:
       - name: Add "unreleased" section to CHANGELOG.md
         uses: ponylang/release-bot-action@0.5.0
         with:
-          entrypoint: add-unreleased-section-to-changelog.py
+          entrypoint: add-unreleased-section-to-changelog
         env:
           GIT_USER_NAME: "Ponylang Main Bot"
           GIT_USER_EMAIL: "ponylang.main@gmail.com"
@@ -168,7 +168,7 @@ jobs:
       - name: Validate CHANGELOG
         uses: ponylang/release-bot-action@0.5.0
         with:
-          entrypoint: pre-artefact-changelog-check.py
+          entrypoint: pre-artefact-changelog-check
 
   # Artefact building steps go here
   # they should all depend on the `pre-artefact-creation` job finishing
@@ -185,7 +185,7 @@ jobs:
       - name: Trigger
         uses: ponylang/release-bot-action@0.5.0
         with:
-          entrypoint: trigger-release-announcement.py
+          entrypoint: trigger-release-announcement
         env:
           GIT_USER_NAME: "Ponylang Main Bot"
           GIT_USER_EMAIL: "ponylang.main@gmail.com"
@@ -199,19 +199,19 @@ Announces the release in a variety of channels.
 
 There are currently three possible channels that you can announce your release: GitHub release notes, the Ponylang Zulip, and the Pony newsletter "Last Week In Pony". There are corresponding commands for each.
 
-- publish-release-notes-to-github.py
-- send-announcement-to-pony-zulip.py
-- add-announcement-to-last-week-in-pony.py
+- publish-release-notes-to-github
+- send-announcement-to-pony-zulip
+- add-announcement-to-last-week-in-pony
 
 In addition there are normal cleanup actions that need to be taken as part of the release process and should be done after all announcements are done.
 
-- rotate-release-notes.py
+- rotate-release-notes
 
 Any project that uses release notes needs to run this command as part of post-announcement cleanup.
 
-- delete-announcement-tag.py
+- delete-announcement-tag
 
-All projects should run this command to clean up the tag used to trigger the announce-a-release step. `delete-announcement-tag.py` should be run after all other announcement commands have been run as they all depend on the `announce-X.Y.Z` existing.
+All projects should run this command to clean up the tag used to trigger the announce-a-release step. `delete-announcement-tag` should be run after all other announcement commands have been run as they all depend on the `announce-X.Y.Z` existing.
 
 **announce-a-release.yml**:
 
@@ -235,20 +235,20 @@ jobs:
       - name: Release notes
         uses: ponylang/release-bot-action@0.5.0
         with:
-          entrypoint: publish-release-notes-to-github.py
+          entrypoint: publish-release-notes-to-github
         env:
           RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
       - name: Zulip
         uses: ponylang/release-bot-action@0.5.0
         with:
-          entrypoint: send-announcement-to-pony-zulip.py
+          entrypoint: send-announcement-to-pony-zulip
         env:
           ZULIP_API_KEY: ${{ secrets.ZULIP_API_KEY }}
           ZULIP_EMAIL: ${{ secrets.ZULIP_EMAIL }}
       - name: Last Week in Pony
         uses: ponylang/release-bot-action@0.5.0
         with:
-          entrypoint: add-announcement-to-last-week-in-pony.py
+          entrypoint: add-announcement-to-last-week-in-pony
         env:
           RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
 
@@ -266,14 +266,14 @@ jobs:
       - name: Rotate release notes
         uses: ponylang/release-bot-action@0.5.0
         with:
-          entrypoint: rotate-release-notes.py
+          entrypoint: rotate-release-notes
         env:
           GIT_USER_NAME: "Ponylang Main Bot"
           GIT_USER_EMAIL: "ponylang.main@gmail.com"
       - name: Delete announcement trigger tag
         uses: ponylang/release-bot-action@0.5.0
         with:
-          entrypoint: delete-announcement-tag.py
+          entrypoint: delete-announcement-tag
         env:
           GIT_USER_NAME: "Ponylang Main Bot"
           GIT_USER_EMAIL: "ponylang.main@gmail.com"

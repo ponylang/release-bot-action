@@ -21,7 +21,7 @@ jobs:
       - name: Validate CHANGELOG
         uses: ponylang/release-bot-action@main
         with:
-          entrypoint: pre-artefact-changelog-check.py
+          entrypoint: pre-artefact-changelog-check
 
   build-and-push-image:
     name: Build and push action image

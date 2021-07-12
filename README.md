@@ -1,24 +1,36 @@
 # Release-bot action
 
+The release-bot action brings together several parts of the Pony repository maintenance ecosystem to create a flexible tool for building a release process driven by GitHub actions.
+
+The release-bot has commands to work with existing Pony tools for managing changelogs and release-notes along with other commands that allow anyone to have a release process that mirrors the one used by the Ponylang developers to create arbitrary release artefacts, rotate CHANGELOGs, rotate release-notes, and post release announcements to a variety of locations.
+
+Additional actions that you might be interested in:
+
+- [changelog-bot](https://github.com/ponylang/changelog-bot-action)
+- [library-documentation-action](https://github.com/ponylang/library-documentation-action)
+- [release-notes-bot](https://github.com/ponylang/release-notes-bot-action)
+
+## Using the release-bot
+
 Multiple workflows are required as part of the standard Pony release process that this bot encompasses. You will need 3 different workflow files.
 
 A release is started by tagging the HEAD commit of a repo with a tag that looks like:
 
 `release-x.y.z` where `x.y.z` is the version to release; e.g. 0.1.0
 
-When the tag is pushed, it will trigger the start-a-release section of the workflow below. See [scripts/start-a-release.bash](scripts/start-a-release.bash) for full-details. When start-a-release finishes, it will delete the `release-x.y.z` tag and push a new tag `x.y.z` that triggers the release step.
+There are three workflows that you should set up to use the release-bot action. Each is detailed later.
 
-Each library or application will have it's own release steps that are needed. They should be supplied as a series of steps in a **release.yml** (see below). Each of those steps will be a requirement to trigger the trigger-release-announcement step.
+- prepare-a-release
+- release
+- announce-a-release
 
-trigger-release-announcement pushes a new tag `announce-x.y.z` that will trigger the next and final step in the process. The trigger-release-announcement step exists so that if any build artefact portion of the release process fails, it can be completed by hand and then, a human can push a `announce-x.y.z` tag to start the final step in the release process.
+The process is broken down into three workflows to make it easier to recover from errors.
 
-announce-a-release will post:
+Each library or application will have its own release steps that are needed. These "artefact building steps" should be supplied as a series of steps in `release` workflow (see below).
 
-- Post the release notes to the release section of GitHub
-- Post a notification of the release to the #announce stream on Zulip
-- Add a notice to the open Last Week in Pony issue
+You can check out [this repository](https://github.com/ponylang/release-bot-action/tree/main/.github/workflows) as well as just about any [ponylang repository](https://github.com/ponylang/) for "live" examples of using this action. You can also receive assistance in the [#release stream of the Pony Zulip](https://ponylang.zulipchat.com/#narrow/stream/190364-release).
 
-Once announce-a-release has completed, the release process is done. For more in-depth details, please see each of the respective scripts in [scripts](scripts/).
+Please note, the release-bot works by tagging the primary branch of a repository for release. It doesn't support having a separate release branch.
 
 ## Example workflows
 
@@ -41,7 +53,7 @@ All Pony library projects should include this step.
 
 All standard Pony projects that include a VERSION file should include this step.
 
-In addition to the "prepare for release" step commands, there is a final "trigger" command that must be run after all the other steps. If the trigger step, `trigger-artefact-creation` isn't run. Then the release process will not actually start.
+In addition to the "prepare for release" step commands, there is a final "trigger" command that must be run after all the other steps. The trigger command, `trigger-artefact-creation`, starts the next workflow `release`.
 
 **prepare-for-a-release.yml**:
 
@@ -136,11 +148,17 @@ jobs:
           GIT_USER_EMAIL: "ponylang.main@gmail.com"
 ```
 
-## trigger-release-announcement
+### Release
 
-Triggers the announcement of the release.
+The meat of the release process. This is the workflow that builds our actual release artefacts, updates documentation and whatever else. Release-bot only provides two commands to be used in this workflow.
 
-Should be run after all release artefact building steps are done. For an application, this would mean that all artefacts have been uploaded to Cloudsmith and any Docker images were built.
+- pre-artefact-changelog-check
+
+Can be used to verify that the release workflow wasn't "accidentally" triggered.
+
+- trigger-release-announcement
+
+Is used to start the `announce-a-release` workflow and is meant to be run after all artefact building has completed.
 
 **release.yml**:
 
@@ -176,7 +194,7 @@ jobs:
   trigger-release-announcement:
     name: Trigger release announcement
     runs-on: ubuntu-latest
-    needs: [ARTEFACT_BUILDING_STEPS_HERE]
+    needs: [ARTEFACT_BUILDING_JOBS_HERE]
     steps:
       - uses: actions/checkout@v2
         with:
@@ -193,7 +211,7 @@ jobs:
 
 trigger-release-announcement, by default, will extract the version being released from the GITHUB_REF environment variable. For this default action to work, trigger-release-announcement must be kicked off by a tag being pushed. If you set up the step to be triggered in any other fashion it will not work unless you supply the version yourself. You can supply the version by providing an optional environment variable `VERSION` set to the version being released.
 
-## announce-a-release
+### announce-a-release
 
 Announces the release in a variety of channels.
 
@@ -243,8 +261,8 @@ jobs:
         with:
           entrypoint: send-announcement-to-pony-zulip
         env:
-          ZULIP_API_KEY: ${{ secrets.ZULIP_API_KEY }}
-          ZULIP_EMAIL: ${{ secrets.ZULIP_EMAIL }}
+          ZULIP_API_KEY: ${{ secrets.ZULIP_RELEASE_API_KEY }}
+          ZULIP_EMAIL: ${{ secrets.ZULIP_RELEASE_EMAIL }}
       - name: Last Week in Pony
         uses: ponylang/release-bot-action@main
         with:
@@ -279,6 +297,340 @@ jobs:
           GIT_USER_EMAIL: "ponylang.main@gmail.com"
 ```
 
-**N.B.** The environment variable `RELEASE_TOKEN` that is required by each step **must** be a personal access token with `public_repo` access. You can not use the `GITHUB_TOKEN` environment variable provided by GitHub's action environment. If you try to use `GITHUB_TOKEN`, no additional steps will trigger after start-a-release has completed.
+### Examples notes
 
-**N.B.** you should set the `ref` input value to `actions/checkout@v2` to whatever the default branch of your repository is. The examples above assume that your default branch name is `main`.
+- In the examples above, any time you see `ref: main` as part of `actions/checkout@v2` setup, you should replace `main` with the name of your default branch.
+
+- The environment variable `RELEASE_TOKEN` that is required by various steps **must** be a personal access token with `public_repo` access. You can not use the `GITHUB_TOKEN` environment variable provided by GitHub's action environment. If you try to use `GITHUB_TOKEN`, no additional steps will trigger after start-a-release has completed.
+
+- The environment variables `GIT_USER_NAME` and `GIT_USER_EMAIL` are used to set the username and email that commits that commands create will appear under.
+
+- The `needs: [ARTEFACT_BUILDING_JOBS_HERE]` would have the `ARTEFACT_BUILDING_JOBS_HERE` text replaced with the names of all the artefact building jobs that need to be completed before the core of the release process is considered "done". See the [GitHub actions documentation](https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions) for more information on [dependent jobs](https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idneeds).
+
+- `ZULIP_API_KEY` and `ZULIP_EMAIL` are covered in more detail in the `send-announcement-to-pony-zulip` command section
+
+## Commands
+
+### add-announcement-to-last-week-in-pony
+
+Posts a notice about the release to the Last Week in Pony issue on the `ponylang/ponylang-website` repo. Posting to the Last Week in Pony issue will result in your release announcement going out in the weekly Pony newsletter.
+
+**Must** be triggered by an `announce-X.Y.Z` tag push.
+
+`add-announcement-to-last-week-in-pony` requires a GitHub personal access token with `public_repo` access to be used to post to the issue. The personal access token needs to be passed in the environment variable `RELEASE_TOKEN`.
+
+An example step config:
+
+```yml
+      - name: Last Week in Pony
+        uses: ponylang/release-bot-action@main
+        with:
+          entrypoint: add-announcement-to-last-week-in-pony
+        env:
+          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+```
+
+### add-unreleased-section-to-changelog
+
+Adds an unreleased section to a standard pony CHANGELOG.md after a release has been tagged.
+
+- **Must** be triggered by an `release-X.Y.Z` tag push.
+- **Must** be run in a job after `actions/checkout`
+- **Should** be run **AFTER** the `trigger-artefact-creation` command
+
+An example step config:
+
+```yml
+      - name: Add "unreleased" section to CHANGELOG.md
+        uses: ponylang/release-bot-action@main
+        with:
+          entrypoint: add-unreleased-section-to-changelog
+        env:
+          GIT_USER_NAME: "Ponylang Main Bot"
+          GIT_USER_EMAIL: "ponylang.main@gmail.com"
+```
+
+### delete-announcement-tag
+
+Deletes the `announce-X.Y.Z` tag that is used to kick off various release announcement commands.
+
+- **Must** be triggered by an `announce-X.Y.Z` tag push.
+- **Must** be run **AFTER** all other `announce-X.Y.Z` triggered command
+- **Must** be run in a job after `actions/checkout`
+
+An example step config:
+
+```yml
+      - name: Delete announcement trigger tag
+        uses: ponylang/release-bot-action@main
+        with:
+          entrypoint: delete-announcement-tag
+        env:
+          GIT_USER_NAME: "Ponylang Main Bot"
+          GIT_USER_EMAIL: "ponylang.main@gmail.com"
+```
+
+### pre-artefact-changelog-check
+
+The `pre-artefact-changelog-check` exists because we are all human. The release-bot is designed to be run via a process that starts with pushing a `release-X.Y.Z` tag. However, we guarantee that eventually someone will slip up and push a `X.Y.Z` tag instead and that will mess up your release.
+
+The `pre-artefact-changelog-check` command is designed to be run as a the first job in the `release.yml` part of the release process. It will check to make sure that the CHANGELOG.md has been correctly versioned for release; as such, it's only a good gate if you are using a standard pony CHANGELOG.md with your project.
+
+- **Must** be triggered by an `X.Y.Z` tag push.
+- **Must** be run after `update-changelog-for-release`
+- **Must** be run in a job after `actions/checkout`
+
+An example step config:
+
+```yml
+      - name: Validate CHANGELOG
+        uses: ponylang/release-bot-action@main
+        with:
+          entrypoint: pre-artefact-changelog-check
+```
+
+### publish-release-notes-to-github
+
+Publishes release notes to the GitHub release associated with the release.
+If the project uses the standard Pony release-notes tools then those will be included as text on the release. If the project uses the standard Pony CHANGELOG.md, then the CHANGELOG for this release will also be included.
+
+- **Must** be triggered by an `announce-X.Y.Z` tag push.
+- **Must** be run in a job after `actions/checkout`
+
+`publish-release-notes-to-github` requires a GitHub personal access token with `public_repo` access to be used to post to the issue. The personal access token needs to be passed in the environment variable `RELEASE_TOKEN`.
+
+An example step config:
+
+```yml
+      - name: Release notes
+        uses: ponylang/release-bot-action@main
+        with:
+          entrypoint: publish-release-notes-to-github
+        env:
+          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+```
+
+### rotate-release-notes
+
+Rotates the release notes for the project after the release is completed.
+
+- **Must** be triggered by an `announce-X.Y.Z` tag push.
+- **Must** be run in a job after `actions/checkout`
+- **Should not** be run before any other release-notes related commands.
+
+An example step config:
+
+```yml
+      - name: Rotate release notes
+        uses: ponylang/release-bot-action@main
+        with:
+          entrypoint: rotate-release-notes
+        env:
+          GIT_USER_NAME: "Ponylang Main Bot"
+          GIT_USER_EMAIL: "ponylang.main@gmail.com"
+```
+
+### send-announcement-to-pony-zulip
+
+Posts information about the release to the [Pony Zulip](https://ponylang.zulipchat.com/) in the `announce` stream. This command requires an api key and associated email address.
+
+If you don't already have an Pony Zulip account, you'll need to create one. Once you've created an account, you'll need to create a bot that will be used to post release messages on your behalf.
+
+In Zulip, go to your account settings. There will be a menu option `Your bots`.
+Select the `Add new bot` option.
+
+When setting up the bot you want to:
+
+- Set the `type` to `Incoming webhook`
+- Give the bot a meaningful `Full Name` like "My Package Release Bot" or "Sean's Release Bot". All release notices will appear under that name.
+- Supply a `Email` that matches your `Full Name` like `sean-release`
+
+After you push `Create Bot`, you'll be taken to your list of active bots. Copy the `BOT EMAIL` and `API KEY` for your bot. These values will be used as environment variables when setting up the add-announcement-to-last-week-in-pony.
+
+- **Must** be triggered by an `announce-X.Y.Z` tag push.
+
+An example step config:
+
+```yml
+      - name: Zulip
+        uses: ponylang/release-bot-action@main
+        with:
+          entrypoint: send-announcement-to-pony-zulip
+        env:
+          ZULIP_API_KEY: ${{ secrets.ZULIP_RELEASE_API_KEY }}
+          ZULIP_EMAIL: ${{ secrets.ZULIP_RELEASE_EMAIL }}
+```
+
+### trigger-artefact-creation
+
+Tags a release and starts the process of moving from the `prepare-for-release` to the `release` workflows in our release process.
+
+- **Must** be triggered by an `release-X.Y.Z` tag push.
+- **Must** be run in a job after `actions/checkout`
+- **Should** be run after all 'pre-tagging' commands otherwise, your tagged release won't be accurate.
+
+An example step config:
+
+```yml
+      - name: Trigger artefact creation
+        uses: ponylang/release-bot-action@main
+        with:
+          entrypoint: trigger-artefact-creation
+        env:
+          GIT_USER_NAME: "Ponylang Main Bot"
+          GIT_USER_EMAIL: "ponylang.main@gmail.com"
+```
+
+### trigger-release-announcement
+
+Starts the process of moving from the `release` to `announce-a-release` workflows.
+
+- **Must** be triggered by an `X.Y.Z` tag push.
+- **Must** be run in a job after `actions/checkout`
+- **Should** be run after all release related tasks otherwise your release will be announced "early"
+
+An example step config:
+
+```yml
+      - name: Trigger
+        uses: ponylang/release-bot-action@main
+        with:
+          entrypoint: trigger-release-announcement
+        env:
+          GIT_USER_NAME: "Ponylang Main Bot"
+          GIT_USER_EMAIL: "ponylang.main@gmail.com"
+```
+
+### update-action-to-use-docker-image-to-run-action
+
+Useful if you are using the release-bot with a GitHub action like the release-bot (we have many GitHub action projects that are part of the ponylang organization).
+
+If you build a docker image as part of your action release process, this command will update your action.yml file to use that image instead of building the action each time from source. It's advised that you use this with any action to prevent your action from breaking if any dependencies in your Dockerfile change after you tag your release.
+
+- **Must** be triggered by an `announce-X.Y.Z` tag push.
+- **Must** be run in a job after `actions/checkout`
+- **Must** be run before `update-action-to-use-dockerfile-to-run-action`
+- **Should** be run before `trigger-artefact-creation` or the entire purpose of this command will be defeated
+
+An example step config:
+
+```yml
+      - name: Set action to run using prebuilt image
+        uses: ponylang/release-bot-action@main
+        with:
+          entrypoint: update-action-to-use-docker-image-to-run-action
+        env:
+          GIT_USER_NAME: "Ponylang Main Bot"
+          GIT_USER_EMAIL: "ponylang.main@gmail.com"
+```
+
+N.B. currently limited to supporting images that are uploaded to Docker Hub.
+
+### update-action-to-use-dockerfile-to-run-action
+
+The companion to `update-action-to-use-docker-image-to-run-action`. It switches back to running the action by building each time from the Dockerfile. This allows for easier testing of functionality when developing new versions of the action.
+
+- **Must** be triggered by an `announce-X.Y.Z` tag push.
+- **Must** be run in a job after `actions/checkout`
+- **Must** be run after `update-action-to-use-docker-image-to-run-action`
+- **Should** be run after `trigger-artefact-creation` or the entire purpose of the `update-action-to-use-docker-image-to-run-action` will be defeated
+
+An example step config:
+
+```yml
+      - name: Set action to run using Dockerfile
+        uses: ponylang/release-bot-action@main
+        with:
+          entrypoint: update-action-to-use-dockerfile-to-run-action
+        env:
+          GIT_USER_NAME: "Ponylang Main Bot"
+          GIT_USER_EMAIL: "ponylang.main@gmail.com"
+```
+
+### update-changelog-for-release
+
+Updates a standard Pony CHANGELOG.md for release. It takes the current "unreleased" section and turns it into a section for the about to be released version.
+
+- **Must** be triggered by an `announce-X.Y.Z` tag push.
+- **Must** be run in a job after `actions/checkout`
+- **Should** be run **BEFORE** the `trigger-artefact-creation` command
+
+An example step config:
+
+```yml
+      - name: Update CHANGELOG.md
+        uses: ponylang/release-bot-action@main
+        with:
+          entrypoint: update-changelog-for-release
+        env:
+          GIT_USER_NAME: "Ponylang Main Bot"
+          GIT_USER_EMAIL: "ponylang.main@gmail.com"
+```
+
+### update-version-in-corral-json
+
+Updates the version in a corral.json to match the release. Should be used with any Pony library.
+
+- **Must** be triggered by an `announce-X.Y.Z` tag push.
+- **Must** be run in a job after `actions/checkout`
+- **Should** be run **BEFORE** the `trigger-artefact-creation` command
+
+An example step config:
+
+```yml
+      - name: Update corral.json
+        uses: ponylang/release-bot-action@main
+        with:
+          entrypoint: update-version-in-corral-json
+        env:
+          GIT_USER_NAME: "Ponylang Main Bot"
+          GIT_USER_EMAIL: "ponylang.main@gmail.com"
+```
+
+### update-version-in-README
+
+Updates a variety of "version formats" in a project's README. Generally used to update usage examples that include the version.
+
+Works with either README.md or README.rst files.
+
+Can update the following version patterns:
+
+- corral add github.com/REPO.git --version \d+\.\d+\.\d+
+- REPO@\d+\.\d+\.\d+ <== standard action url
+- docker://REPO:\d+\.\d+\.\d+ <== docker hub url
+
+- **Must** be triggered by an `announce-X.Y.Z` tag push.
+- **Must** be run in a job after `actions/checkout`
+- **Should** be run **BEFORE** the `trigger-artefact-creation` command
+
+An example step config:
+
+```yml
+      - name: Update version in README
+        uses: ponylang/release-bot-action@main
+        with:
+          entrypoint: update-version-in-README
+        env:
+          GIT_USER_NAME: "Ponylang Main Bot"
+          GIT_USER_EMAIL: "ponylang.main@gmail.com"
+```
+
+### update-version-in-VERSION
+
+Updates the version in a VERSION file. VERSION files are used in many Pony projects.
+
+- **Must** be triggered by an `announce-X.Y.Z` tag push.
+- **Must** be run in a job after `actions/checkout`
+- **Should** be run **BEFORE** the `trigger-artefact-creation` command
+
+An example step config:
+
+```yml
+      - name: Update VERSION
+        uses: ponylang/release-bot-action@main
+        with:
+          entrypoint: update-version-in-VERSION
+        env:
+          GIT_USER_NAME: "Ponylang Main Bot"
+          GIT_USER_EMAIL: "ponylang.main@gmail.com"
+```

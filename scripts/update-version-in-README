@@ -29,6 +29,18 @@ if 'GIT_USER_EMAIL' not in os.environ:
     print(ERROR + "Exiting." + ENDC)
     sys.exit(1)
 
+if 'GITHUB_REF' not in os.environ:
+    print(ERROR + "GITHUB_REF needs to be set in env. Exiting." + ENDC)
+    sys.exit(1)
+
+if 'GITHUB_REPOSITORY' not in os.environ:
+    print(ERROR + "GITHUB_REPOSITORY needs to be set in env. Exiting." + ENDC)
+    sys.exit(1)
+
+if 'GITHUB_WORKSPACE' not in os.environ:
+    print(ERROR + "GITHUB_WORKSPACE needs to be set in env. Exiting." + ENDC)
+    sys.exit(1)
+
 # Get repository and version names from the environment
 # version is in the form of "refs/tags/release-1.0.0" where the version is 1.0.0
 repository = os.environ['GITHUB_REPOSITORY']

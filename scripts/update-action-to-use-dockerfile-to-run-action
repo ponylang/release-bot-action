@@ -29,13 +29,18 @@ if 'GIT_USER_EMAIL' not in os.environ:
     print(ERROR + "Exiting." + ENDC)
     sys.exit(1)
 
+if 'GITHUB_REF' not in os.environ:
+    print(ERROR + "GITHUB_REF needs to be set in env. Exiting." + ENDC)
+    sys.exit(1)
+
+if 'GITHUB_WORKSPACE' not in os.environ:
+    print(ERROR + "GITHUB_WORKSPACE needs to be set in env. Exiting." + ENDC)
+    sys.exit(1)
+
 # validate action.yml exists
 if not os.path.isfile("action.yml"):
     print(ERROR + "Unable to find action.yml. Exiting." + ENDC)
     sys.exit(1)
-
-# Get repository from the environment
-repository = os.environ['GITHUB_REPOSITORY']
 
 git = git.Repo(os.environ['GITHUB_WORKSPACE']).git
 print(INFO + "Setting up git configuration." + ENDC)

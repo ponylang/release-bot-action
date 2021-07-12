@@ -21,6 +21,14 @@ if 'ZULIP_EMAIL' not in os.environ:
     print(ERROR + "ZULIP_EMAIL needs to be set in env. Exiting." + ENDC)
     sys.exit(1)
 
+if 'GITHUB_REF' not in os.environ:
+    print(ERROR + "GITHUB_REF needs to be set in env. Exiting." + ENDC)
+    sys.exit(1)
+
+if 'GITHUB_REPOSITORY' not in os.environ:
+    print(ERROR + "GITHUB_REPOSITORY needs to be set in env. Exiting." + ENDC)
+    sys.exit(1)
+
 # version is in the form of "refs/tags/release-1.0.0" where the version is 1.0.0
 version = re.sub('refs/tags/announce-', '', os.environ['GITHUB_REF'])
 

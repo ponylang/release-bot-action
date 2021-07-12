@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file. This projec
 - Split "start-a-release" into multiple different commands ([PR #35](https://github.com/ponylang/release-bot-action/pull/35))
 - Split "announce-a-release" into multiple different commands ([PR #44](https://github.com/ponylang/release-bot-action/pull/44))
 - Rewrite all bash commands in Python ([PR #46](https://github.com/ponylang/release-bot-action/pull/46))
+- Remove file extension from commands ([PR #47](https://github.com/ponylang/release-bot-action/pull/47))
 
 ## [0.5.0] - 2021-03-09
 

@@ -41,7 +41,7 @@ if results.totalCount == 0:
 
 comment = (
     f'Version {version} of {release_repo} has been released.'
-    f"\n\n"
+    f"\n"
     f'See the '
     f'[release notes](https://github.com/{release_repo}/releases/tag/{version})'
     f' for more details.'

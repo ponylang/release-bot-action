@@ -153,3 +153,9 @@ As part of an internal cleanup, all commands written in bash have been rewritten
 
 As part of this change, the input values to `send-announcement-to-pony-zulip.py` have changed from those to `send-announcement-to-pony-zulip.bash`. Whereas previously, a single environment variable called `ZULIP_TOKEN` was expected, we now need two `ZULIP_API_KEY` and `ZULIP_EMAIL`.
 
+## Remove file extension from commands
+
+Previously all the release-bot-commands included a file extension like '.py'. We've removed all file extensions to allow for us to change the implementation language in the future without it being a breaking change.
+
+Where a command might previously have been `foo.py` it is now simply `foo`.
+

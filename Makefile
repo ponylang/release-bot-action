@@ -10,7 +10,7 @@ PYTHON_COMMANDS := $(shell find scripts/)
 
 all: build
 
-build: action.yml Dockerfile entrypoint.sh scripts/*
+build: action.yml Dockerfile entrypoint scripts/*
 	docker build --pull -t "${IMAGE}:${IMAGE_TAG}" .
 	docker build --pull -t "${IMAGE}:latest" .
 	touch $@

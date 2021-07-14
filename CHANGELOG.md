@@ -2,17 +2,11 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/) and [Keep a CHANGELOG](http://keepachangelog.com/).
 
-## [unreleased] - unreleased
-
-### Fixed
-
+## [0.6.1] - 2021-07-14
 
 ### Added
 
 - Add support for ponyc's specialized build requirements ([PR #51](https://github.com/ponylang/release-bot-action/pull/51))
-
-### Changed
-
 
 ## [0.6.0] - 2021-07-14
 

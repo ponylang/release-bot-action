@@ -36,8 +36,14 @@ if 'GITHUB_WORKSPACE' not in os.environ:
     print(ERROR + "GITHUB_WORKSPACE needs to be set in env. Exiting." + ENDC)
     sys.exit(1)
 
-# version is in the form of "refs/tags/release-1.0.0" where the version is 1.0.0
-version = re.sub('refs/tags/', '', os.environ['GITHUB_REF'])
+if 'CUSTOM_VERSION' not in os.environ:
+    # version is in the form of "refs/tags/release-1.0.0"
+    # where the version is 1.0.0
+    version = re.sub('refs/tags/', '', os.environ['GITHUB_REF'])
+else:
+    # some workflows like ponyc have to build outside of GitHub actions
+    # this allows the setting of a custom variable to trigger the next step
+    version = os.environ['CUSTOM_VERSION']
 
 git = git.Repo(os.environ['GITHUB_WORKSPACE']).git
 print(INFO + "Setting up git configuration." + ENDC)

@@ -44,13 +44,14 @@ jobs:
     needs:
       - build-and-push-image
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
+        with:
+          ref: "main"
+          token: ${{ secrets.RELEASE_TOKEN }}
       - name: Trigger
         uses: ponylang/release-bot-action@174513091f695a22adf299f87bfb3c247504d61a
         with:
-          step: trigger-release-announcement
-          default_branch: "main"
+          entrypoint: trigger-release-announcement
         env:
           GIT_USER_NAME: "Ponylang Main Bot"
           GIT_USER_EMAIL: "ponylang.main@gmail.com"
-          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}

@@ -1,5 +1,5 @@
-name: 'Release Bot'
-description: 'Standard Pony Library and Application release functionality'
+description: Standard Pony Library and Application release functionality
+name: Release Bot
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  image: docker://ponylang/release-bot-action:0.6.0
+  using: docker

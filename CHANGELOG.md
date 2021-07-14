@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Added
 
+- Add support for ponyc's specialized build requirements ([PR #51](https://github.com/ponylang/release-bot-action/pull/51))
 
 ### Changed
 

@@ -19,7 +19,7 @@ jobs:
           ref: "main"
           token: ${{ secrets.RELEASE_TOKEN }}
       - name: Validate CHANGELOG
-        uses: ponylang/release-bot-action@main
+        uses: ponylang/release-bot-action@174513091f695a22adf299f87bfb3c247504d61a
         with:
           entrypoint: pre-artefact-changelog-check
 
@@ -46,7 +46,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Trigger
-        uses: ponylang/release-bot-action@main
+        uses: ponylang/release-bot-action@174513091f695a22adf299f87bfb3c247504d61a
         with:
           step: trigger-release-announcement
           default_branch: "main"

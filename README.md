@@ -507,7 +507,7 @@ Useful if you are using the release-bot with a GitHub action like the release-bo
 
 If you build a docker image as part of your action release process, this command will update your action.yml file to use that image instead of building the action each time from source. It's advised that you use this with any action to prevent your action from breaking if any dependencies in your Dockerfile change after you tag your release.
 
-- **Must** be triggered by an `announce-X.Y.Z` tag push.
+- **Must** be triggered by an `release-X.Y.Z` tag push.
 - **Must** be run in a job after `actions/checkout`
 - **Must** be run before `update-action-to-use-dockerfile-to-run-action`
 - **Should** be run before `trigger-artefact-creation` or the entire purpose of this command will be defeated

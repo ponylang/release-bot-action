@@ -1,13 +1,17 @@
 FROM ponylang/changelog-tool:release AS changelog-tool
-FROM alpine:3.12
+FROM ubuntu:20.04
 
-RUN apk add --update --no-cache \
-  git \
-  py3-pip
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends \
+     git \
+     python3-pip \
+  && rm -rf /var/lib/apt/lists/* \
+  && apt-get -y autoremove --purge \
+  && apt-get -y clean
 
 RUN pip3 install \
   gitpython \
-  pygithub==1.54.1 \
+  pygithub \
   pylint \
   pyyaml \
   zulip

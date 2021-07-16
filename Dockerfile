@@ -10,11 +10,11 @@ RUN apt-get update \
   && apt-get -y clean
 
 RUN pip3 install \
-  gitpython \
-  pygithub \
-  pylint \
-  pyyaml \
-  zulip
+  gitpython==3.1.18 \
+  pygithub==1.55 \
+  pylint==2.9.3 \
+  pyyaml==5.4.1 \
+  zulip==0.8.0
 
 COPY --from=changelog-tool /usr/local/bin/changelog-tool /usr/local/bin/changelog-tool
 

@@ -1,0 +1,24 @@
+#!/usr/bin/python3
+
+ENDC = '\033[0m'
+ERROR = '\033[31m'
+INFO = '\033[34m'
+NOTICE = '\033[33m'
+
+import json
+import os
+import sys
+
+if not os.path.isfile('corral.json'):
+    print(ERROR + "No corral.json found. Exiting" + ENDC)
+    sys.exit(1)
+
+name = ""
+version = ""
+packages = []
+with open('corral.json', 'r+') as cjson:
+    corral_data = json.load(cjson)
+    name = corral_data['info']['name']
+    version = corral_data['info']['version']
+    packages = corral_data['packages']
+

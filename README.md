@@ -64,6 +64,8 @@ on:
   push:
     tags: release-\d+.\d+.\d+
 
+concurrency: prepare-for-a-release
+
 jobs:
   # all tasks that need to be done before we add an X.Y.Z tag
   # should be done as a step in the pre-tagging job.
@@ -170,6 +172,8 @@ on:
     tags:
       - \d+.\d+.\d+
 
+concurrency: release
+
 jobs:
   # validation to assure that we should in fact continue with the release should
   # be done here. the primary reason for this step is to verify that the release
@@ -239,6 +243,8 @@ name: Announce a release
 on:
   push:
     tags: announce-\d+.\d+.\d+
+
+concurrency: announce-a-release
 
 jobs:
   announce:

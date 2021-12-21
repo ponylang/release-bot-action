@@ -22,7 +22,7 @@ jobs:
     name: Lint python commands
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: pylint
         run: make pylint
 
@@ -30,7 +30,7 @@ jobs:
     name: Validate Docker image builds
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: Docker build
         run: "docker build --pull ."
 
@@ -40,6 +40,6 @@ jobs:
     container:
       image: ponylang/changelog-tool:release
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: Verify CHANGELOG
         run: changelog-tool verify

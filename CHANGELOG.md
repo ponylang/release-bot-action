@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Fixed
 
+- Update to work with newer versions of git ([PR #57](https://github.com/ponylang/release-bot-action/pull/57))
 
 ### Added
 

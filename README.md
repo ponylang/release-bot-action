@@ -62,7 +62,7 @@ name: Prepare for a release
 
 on:
   push:
-    tags: release-\d+.\d+.\d+
+    tags: 'release-[0-9]+.[0-9]+.[0-9]+'
 
 concurrency: prepare-for-a-release
 
@@ -170,7 +170,7 @@ name: Release
 on:
   push:
     tags:
-      - \d+.\d+.\d+
+      - '[0-9]+.[0-9]+.[0-9]+'
 
 concurrency: release
 
@@ -242,7 +242,7 @@ name: Announce a release
 
 on:
   push:
-    tags: announce-\d+.\d+.\d+
+    tags: 'announce-[0-9]+.[0-9]+.[0-9]+'
 
 concurrency: announce-a-release
 

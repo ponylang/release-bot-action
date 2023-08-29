@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Fixed
 
+- Fixed syntax error in `update-action-to-use-docker-image-to-run-action` ([PR #64](https://github.com/ponylang/release-bot-action/pull/64))
 
 ### Added
 

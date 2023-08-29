@@ -49,6 +49,7 @@ jobs:
         env:
           GIT_USER_NAME: "Ponylang Main Bot"
           GIT_USER_EMAIL: "ponylang.main@gmail.com"
+          REGISTRY: "ghcr.io"
 
   # tag for release
   # this will kick off the next stage of the release process

@@ -71,9 +71,9 @@ if 'REGISTRY' in os.environ:
     }
 
     registry = os.environ['REGISTRY']
-    if registry in registries
+    if registry in registries:
         registry = registries[registry]
-    else
+    else:
         print(ERROR + registry + " isn't a supported REGISTRY. Exiting." + ENDC)
         sys.exit(1)
 

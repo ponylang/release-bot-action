@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Added
 
+- Add support for GHCR.io ([PR #61](https://github.com/ponylang/release-bot-action/pull/61))
 
 ### Changed
 

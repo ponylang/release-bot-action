@@ -530,7 +530,20 @@ An example step config:
           GIT_USER_EMAIL: "ponylang.main@gmail.com"
 ```
 
-N.B. currently limited to supporting images that are uploaded to Docker Hub.
+To use a registry other than DockerHub, add the registry in the REGISTRY environment variable. For example to use GitHub Container Registry:
+
+```yml
+      - name: Set action to run using prebuilt image
+        uses: ponylang/release-bot-action@0.6.1
+        with:
+          entrypoint: update-action-to-use-docker-image-to-run-action
+        env:
+          GIT_USER_NAME: "Ponylang Main Bot"
+          GIT_USER_EMAIL: "ponylang.main@gmail.com"
+          REGISTRY: "ghcr.io"
+```
+
+Current valid entries for `REGISTRY` are '', 'docker.io', and 'ghcr.io'.
 
 ### update-action-to-use-dockerfile-to-run-action
 
@@ -604,6 +617,7 @@ Can update the following version patterns:
 - corral add github.com/REPO.git --version \d+\.\d+\.\d+
 - REPO@\d+\.\d+\.\d+ <== standard action url
 - docker://REPO:\d+\.\d+\.\d+ <== docker hub url
+- docker://ghcr.io/REPO:\d+\.\d+\.\d+ <== github container registry url
 
 - **Must** be triggered by an `announce-X.Y.Z` tag push.
 - **Must** be run in a job after `actions/checkout`

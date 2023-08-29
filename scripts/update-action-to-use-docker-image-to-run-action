@@ -59,11 +59,28 @@ git.config('--global', 'user.email', os.environ['GIT_USER_EMAIL'])
 git.config('--global', 'branch.autosetuprebase', 'always')
 git.config('--global', '--add', 'safe.directory', os.environ['GITHUB_WORKSPACE'])
 
-# open README and update with new version
+# open action.yml and update with new version. using the denoted registry if
+# one is given
+registry = ''
+
+if 'REGISTRY' in os.environ:
+    registries = {
+        "": "",
+        "docker.io": "",
+        "ghcr.io": "ghcr.io/"
+    }
+
+    registry = os.environ['REGISTRY']
+    if registry in registries
+        registry = registries[registry]
+    else
+        print(ERROR + registry + " isn't a supported REGISTRY. Exiting." + ENDC)
+        sys.exit(1)
+
 print(INFO + "Switching to prebuilt image as runner in action.yml" + ENDC)
 with open('action.yml', 'r+') as action_yml:
     text = yaml.safe_load(action_yml)
-    text['runs']['image'] = f'docker://{repository}:{version}'
+    text['runs']['image'] = f'docker://{registry}{repository}:{version}'
     action_yml.seek(0)
     yaml.dump(text, action_yml)
     action_yml.truncate()

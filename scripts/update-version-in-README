@@ -57,6 +57,8 @@ git.config('--global', '--add', 'safe.directory', os.environ['GITHUB_WORKSPACE']
 subs = [
     (fr'docker://{repository}:\d+\.\d+\.\d+',
      f'docker://{repository}:{version}'),
+    (fr'docker://ghcr.io/{repository}:\d+\.\d+\.\d+',
+     f'docker://ghcr.io/{repository}:{version}'),
     (fr'{repository}@\d+\.\d+\.\d+',
      f'{repository}@{version}'),
     (fr'corral add github.com/{repository}.git -(-version|v) \d+\.\d+\.\d+',

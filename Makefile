@@ -26,7 +26,7 @@ push: build
 pylint: build $(PYTHON_COMMANDS)
 	$(foreach file, $(notdir $(PYTHON_COMMANDS)), \
 		echo "Linting $(file)"; \
-		docker run --entrypoint pylint --rm "ghcr.io/${IMAGE}:latest" /commands/$(file); \
+		docker run --entrypoint pylint --rm "ghcr.io/${IMAGE}:latest" /commands/$(file) || exit 1; \
 	)
 
 .PHONY: push

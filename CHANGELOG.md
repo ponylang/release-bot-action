@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/) and [Keep a CHANGELOG](http://keepachangelog.com/).
 
-## [unreleased] - unreleased
+## [0.6.2] - 2023-08-29
 
 ### Fixed
 
@@ -11,9 +11,6 @@ All notable changes to this project will be documented in this file. This projec
 ### Added
 
 - Add support for GHCR.io ([PR #61](https://github.com/ponylang/release-bot-action/pull/61))
-
-### Changed
-
 
 ## [0.6.1] - 2021-07-14
 

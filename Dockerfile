@@ -1,5 +1,5 @@
 FROM ghcr.io/ponylang/changelog-tool:release AS changelog-tool
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \

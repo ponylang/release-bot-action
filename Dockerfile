@@ -1,4 +1,4 @@
-FROM ponylang/changelog-tool:release AS changelog-tool
+FROM ghcr.io/ponylang/changelog-tool:release AS changelog-tool
 FROM ubuntu:20.04
 
 RUN apt-get update \

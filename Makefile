@@ -11,15 +11,11 @@ PYTHON_COMMANDS := $(shell find scripts/)
 all: build
 
 build: action.yml Dockerfile entrypoint scripts/*
-	docker build --pull -t "${IMAGE}:${IMAGE_TAG}" .
-	docker build --pull -t "${IMAGE}:latest" .
 	docker build --pull -t "ghcr.io/${IMAGE}:${IMAGE_TAG}" .
 	docker build --pull -t "ghcr.io/${IMAGE}:latest" .
 	touch $@
 
 push: build
-	docker push "${IMAGE}:${IMAGE_TAG}"
-	docker push "${IMAGE}:latest"
 	docker push "ghcr.io/${IMAGE}:${IMAGE_TAG}"
 	docker push "ghcr.io/${IMAGE}:latest"
 

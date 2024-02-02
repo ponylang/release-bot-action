@@ -76,7 +76,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout main
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4.1.1
         with:
           ref: "main"
           token: ${{ secrets.RELEASE_TOKEN }}
@@ -112,7 +112,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout main
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4.1.1
         with:
           ref: "main"
           token: ${{ secrets.RELEASE_TOKEN }}
@@ -137,7 +137,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout main
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4.1.1
         with:
           ref: "main"
           token: ${{ secrets.RELEASE_TOKEN }}
@@ -183,7 +183,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout main
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4.1.1
         with:
           ref: "main"
           token: ${{ secrets.RELEASE_TOKEN }}
@@ -200,7 +200,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ARTEFACT_BUILDING_JOBS_HERE]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4.1.1
         with:
           ref: "main"
           token: ${{ secrets.RELEASE_TOKEN }}
@@ -252,7 +252,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout main
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4.1.1
         with:
           ref: "main"
           token: ${{ secrets.RELEASE_TOKEN }}
@@ -283,7 +283,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout main
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4.1.1
         with:
           ref: "main"
           token: ${{ secrets.RELEASE_TOKEN }}
@@ -305,7 +305,7 @@ jobs:
 
 ### Examples notes
 
-- In the examples above, any time you see `ref: main` as part of `actions/checkout@v3` setup, you should replace `main` with the name of your default branch.
+- In the examples above, any time you see `ref: main` as part of `actions/checkout@v4.1.1` setup, you should replace `main` with the name of your default branch.
 
 - The environment variable `RELEASE_TOKEN` that is required by various steps **must** be a personal access token with `public_repo` access. You can not use the `GITHUB_TOKEN` environment variable provided by GitHub's action environment. If you try to use `GITHUB_TOKEN`, no additional steps will trigger after start-a-release has completed.
 

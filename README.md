@@ -81,21 +81,21 @@ jobs:
           ref: "main"
           token: ${{ secrets.RELEASE_TOKEN }}
       - name: Update CHANGELOG.md
-        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.3
+        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.4
         with:
           entrypoint: update-changelog-for-release
         env:
           GIT_USER_NAME: "Ponylang Main Bot"
           GIT_USER_EMAIL: "ponylang.main@gmail.com"
       - name: Update VERSION
-        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.3
+        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.4
         with:
           entrypoint: update-version-in-VERSION
         env:
           GIT_USER_NAME: "Ponylang Main Bot"
           GIT_USER_EMAIL: "ponylang.main@gmail.com"
       - name: Update version in README
-        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.3
+        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.4
         with:
           entrypoint: update-version-in-README
         env:
@@ -117,7 +117,7 @@ jobs:
           ref: "main"
           token: ${{ secrets.RELEASE_TOKEN }}
       - name: Trigger artefact creation
-        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.3
+        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.4
         with:
           entrypoint: trigger-artefact-creation
         env:
@@ -142,7 +142,7 @@ jobs:
           ref: "main"
           token: ${{ secrets.RELEASE_TOKEN }}
       - name: Add "unreleased" section to CHANGELOG.md
-        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.3
+        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.4
         with:
           entrypoint: add-unreleased-section-to-changelog
         env:
@@ -188,7 +188,7 @@ jobs:
           ref: "main"
           token: ${{ secrets.RELEASE_TOKEN }}
       - name: Validate CHANGELOG
-        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.3
+        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.4
         with:
           entrypoint: pre-artefact-changelog-check
 
@@ -205,7 +205,7 @@ jobs:
           ref: "main"
           token: ${{ secrets.RELEASE_TOKEN }}
       - name: Trigger
-        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.3
+        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.4
         with:
           entrypoint: trigger-release-announcement
         env:
@@ -257,20 +257,20 @@ jobs:
           ref: "main"
           token: ${{ secrets.RELEASE_TOKEN }}
       - name: Release notes
-        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.3
+        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.4
         with:
           entrypoint: publish-release-notes-to-github
         env:
           RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
       - name: Zulip
-        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.3
+        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.4
         with:
           entrypoint: send-announcement-to-pony-zulip
         env:
           ZULIP_API_KEY: ${{ secrets.ZULIP_RELEASE_API_KEY }}
           ZULIP_EMAIL: ${{ secrets.ZULIP_RELEASE_EMAIL }}
       - name: Last Week in Pony
-        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.3
+        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.4
         with:
           entrypoint: add-announcement-to-last-week-in-pony
         env:
@@ -288,14 +288,14 @@ jobs:
           ref: "main"
           token: ${{ secrets.RELEASE_TOKEN }}
       - name: Rotate release notes
-        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.3
+        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.4
         with:
           entrypoint: rotate-release-notes
         env:
           GIT_USER_NAME: "Ponylang Main Bot"
           GIT_USER_EMAIL: "ponylang.main@gmail.com"
       - name: Delete announcement trigger tag
-        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.3
+        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.4
         with:
           entrypoint: delete-announcement-tag
         env:
@@ -329,7 +329,7 @@ An example step config:
 
 ```yml
       - name: Last Week in Pony
-        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.3
+        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.4
         with:
           entrypoint: add-announcement-to-last-week-in-pony
         env:
@@ -348,7 +348,7 @@ An example step config:
 
 ```yml
       - name: Add "unreleased" section to CHANGELOG.md
-        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.3
+        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.4
         with:
           entrypoint: add-unreleased-section-to-changelog
         env:
@@ -368,7 +368,7 @@ An example step config:
 
 ```yml
       - name: Delete announcement trigger tag
-        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.3
+        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.4
         with:
           entrypoint: delete-announcement-tag
         env:
@@ -390,7 +390,7 @@ An example step config:
 
 ```yml
       - name: Validate CHANGELOG
-        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.3
+        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.4
         with:
           entrypoint: pre-artefact-changelog-check
 ```
@@ -409,7 +409,7 @@ An example step config:
 
 ```yml
       - name: Release notes
-        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.3
+        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.4
         with:
           entrypoint: publish-release-notes-to-github
         env:
@@ -428,7 +428,7 @@ An example step config:
 
 ```yml
       - name: Rotate release notes
-        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.3
+        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.4
         with:
           entrypoint: rotate-release-notes
         env:
@@ -459,7 +459,7 @@ An example step config:
 
 ```yml
       - name: Zulip
-        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.3
+        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.4
         with:
           entrypoint: send-announcement-to-pony-zulip
         env:
@@ -479,7 +479,7 @@ An example step config:
 
 ```yml
       - name: Trigger artefact creation
-        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.3
+        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.4
         with:
           entrypoint: trigger-artefact-creation
         env:
@@ -499,7 +499,7 @@ An example step config:
 
 ```yml
       - name: Trigger
-        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.3
+        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.4
         with:
           entrypoint: trigger-release-announcement
         env:
@@ -522,7 +522,7 @@ An example step config:
 
 ```yml
       - name: Set action to run using prebuilt image
-        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.3
+        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.4
         with:
           entrypoint: update-action-to-use-docker-image-to-run-action
         env:
@@ -534,7 +534,7 @@ To use a registry other than DockerHub, add the registry in the REGISTRY environ
 
 ```yml
       - name: Set action to run using prebuilt image
-        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.3
+        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.4
         with:
           entrypoint: update-action-to-use-docker-image-to-run-action
         env:
@@ -558,7 +558,7 @@ An example step config:
 
 ```yml
       - name: Set action to run using Dockerfile
-        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.3
+        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.4
         with:
           entrypoint: update-action-to-use-dockerfile-to-run-action
         env:
@@ -578,7 +578,7 @@ An example step config:
 
 ```yml
       - name: Update CHANGELOG.md
-        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.3
+        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.4
         with:
           entrypoint: update-changelog-for-release
         env:
@@ -598,7 +598,7 @@ An example step config:
 
 ```yml
       - name: Update corral.json
-        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.3
+        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.4
         with:
           entrypoint: update-version-in-corral-json
         env:
@@ -627,7 +627,7 @@ An example step config:
 
 ```yml
       - name: Update version in README
-        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.3
+        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.4
         with:
           entrypoint: update-version-in-README
         env:
@@ -647,7 +647,7 @@ An example step config:
 
 ```yml
       - name: Update VERSION
-        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.3
+        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.4
         with:
           entrypoint: update-version-in-VERSION
         env:

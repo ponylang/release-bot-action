@@ -1,5 +1,5 @@
 description: Standard Pony Library and Application release functionality
 name: Release Bot
 runs:
-  image: docker://ghcr.io/ponylang/release-bot-action:0.6.4
+  image: Dockerfile
   using: docker

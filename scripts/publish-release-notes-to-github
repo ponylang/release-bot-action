@@ -65,5 +65,12 @@ g = Github(os.environ['RELEASE_TOKEN'])
 repo = g.get_repo(os.environ['GITHUB_REPOSITORY'])
 
 print(INFO + "Uploading release notes..." + ENDC)
-repo.create_git_release(version, version, release_notes)
+# check to see if the release already exists
+ghrelease = repo.get_release(version)
+if ghrelease:
+    print(INFO + "Release already exists. Updating release notes." + ENDC)
+    ghrelease.update_release(name=version, message=release_notes)
+else:
+    print(INFO + "Release does not exist. Creating release notes." + ENDC)
+    repo.create_git_release(version, version, release_notes)
 print(INFO + "Release notes uploaded." + ENDC)

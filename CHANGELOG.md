@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Fixed
 
+- Handle release already existing when uploading release notes ([PR #83](https://github.com/ponylang/release-bot-action/pull/83))
 
 ### Added
 

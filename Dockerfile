@@ -1,5 +1,5 @@
 FROM ghcr.io/ponylang/changelog-tool:release AS changelog-tool
-FROM ubuntu:20.04
+FROM ubuntu:24.04
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
@@ -9,7 +9,7 @@ RUN apt-get update \
   && apt-get -y autoremove --purge \
   && apt-get -y clean
 
-RUN pip3 install \
+RUN pip3 install --break-system-packages\
   gitpython==3.1.18 \
   pygithub==1.55 \
   pylint==2.9.3 \

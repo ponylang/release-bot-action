@@ -53,7 +53,7 @@ if not os.path.isfile('corral.json'):
     sys.exit(1)
 
 print(INFO + "Updating version in corral.json to " + version + ENDC)
-with open('corral.json', 'r+') as cjson:
+with open('corral.json', 'r+', encoding='utf-8') as cjson:
     corral_data = json.load(cjson)
     corral_data['info']['version'] = version
     cjson.seek(0)

@@ -37,7 +37,7 @@ print(INFO + "Preparing to update GitHub release notes..." + ENDC)
 release_notes = ""
 if os.path.isfile('.release-notes/next-release.md'):
     print(INFO + "next-release.md found. Adding entries to release notes." + ENDC)
-    release_notes = Path('.release-notes/next-release.md').read_text() + "\n"
+    release_notes = Path('.release-notes/next-release.md').read_text(encoding='utf-8') + "\n"
 else:
     print(INFO + "No next-release.md found." + ENDC)
 

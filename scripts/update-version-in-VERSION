@@ -53,7 +53,7 @@ if not os.path.isfile('VERSION'):
 
 # open VERSION and update with new version
 print(INFO + "Updating VERSION to " + version + ENDC)
-with open('VERSION', 'w') as vf:
+with open('VERSION', 'w', encoding='utf-8') as vf:
     vf.write(version)
     vf.write("\n")
 

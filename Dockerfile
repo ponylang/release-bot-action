@@ -1,5 +1,5 @@
 FROM ghcr.io/ponylang/changelog-tool:release AS changelog-tool
-FROM ubuntu:20.04
+FROM ubuntu:24.04
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
@@ -9,19 +9,19 @@ RUN apt-get update \
   && apt-get -y autoremove --purge \
   && apt-get -y clean
 
-RUN pip3 install \
-  gitpython==3.1.18 \
+RUN pip3 install --break-system-packages\
+  gitpython \
   pygithub==1.55 \
-  pylint==2.9.3 \
-  pyyaml==5.4.1 \
-  zulip==0.8.0
+  pylint \
+  pyyaml \
+  zulip
 
 COPY --from=changelog-tool /usr/local/bin/changelog-tool /usr/local/bin/changelog-tool
 
 COPY entrypoint /entrypoint
 COPY scripts/ /commands/
 
-ENV PATH "/commands:$PATH"
+ENV PATH="/commands:$PATH"
 
 RUN chmod a+x /commands/*
 RUN chmod a+x /entrypoint

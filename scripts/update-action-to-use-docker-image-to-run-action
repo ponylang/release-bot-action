@@ -78,7 +78,7 @@ if 'REGISTRY' in os.environ:
         sys.exit(1)
 
 print(INFO + "Switching to prebuilt image as runner in action.yml" + ENDC)
-with open('action.yml', 'r+') as action_yml:
+with open('action.yml', 'r+', encoding='utf-8') as action_yml:
     text = yaml.safe_load(action_yml)
     text['runs']['image'] = f'docker://{registry}{repository}:{version}'
     action_yml.seek(0)

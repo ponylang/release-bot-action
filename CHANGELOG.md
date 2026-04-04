@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Fixed
 
+- Fix release note publishing when no GitHub Release exists ([PR #91](https://github.com/ponylang/release-bot-action/pull/91))
 
 ### Added
 

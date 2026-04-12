@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/) and [Keep a CHANGELOG](http://keepachangelog.com/).
 
-## [unreleased] - unreleased
+## [0.6.6] - 2026-04-12
 
 ### Fixed
 
@@ -11,9 +11,6 @@ All notable changes to this project will be documented in this file. This projec
 ### Added
 
 - Add `create-empty-github-release` entrypoint ([PR #94](https://github.com/ponylang/release-bot-action/pull/94))
-
-### Changed
-
 
 ## [0.6.5] - 2026-04-04
 

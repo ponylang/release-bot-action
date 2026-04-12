@@ -1,0 +1,75 @@
+#!/usr/bin/python3
+# pylint: disable=C0103
+# pylint: disable=C0114
+
+import os
+import re
+import sys
+from github import Auth
+from github import Github
+from github import GithubException
+from github import UnknownObjectException
+
+ENDC = '\033[0m'
+ERROR = '\033[31m'
+INFO = '\033[34m'
+NOTICE = '\033[33m'
+
+# validate env
+if 'RELEASE_TOKEN' not in os.environ:
+    print(ERROR + "RELEASE_TOKEN needs to be set in env. Exiting." + ENDC)
+    sys.exit(1)
+
+if 'GITHUB_REF' not in os.environ:
+    print(ERROR + "GITHUB_REF needs to be set in env. Exiting." + ENDC)
+    sys.exit(1)
+
+if 'GITHUB_REPOSITORY' not in os.environ:
+    print(ERROR + "GITHUB_REPOSITORY needs to be set in env. Exiting." + ENDC)
+    sys.exit(1)
+
+# version is in the form of "refs/tags/1.0.0" where the version is 1.0.0
+version = re.sub('refs/tags/', '', os.environ['GITHUB_REF'])
+
+g = Github(auth=Auth.Token(os.environ['RELEASE_TOKEN']))
+repo = g.get_repo(os.environ['GITHUB_REPOSITORY'])
+
+# If the release already exists, leave it alone. A prior run may have
+# uploaded assets, populated the body, or set the "latest" flag; modifying
+# any of that here would clobber recovery paths. Only create the release
+# when it's missing.
+print(INFO + "Checking for existing GitHub release for " + version + "..."
+      + ENDC)
+try:
+    repo.get_release(version)
+    print(INFO + "Release already exists. Not modifying." + ENDC)
+    sys.exit(0)
+except UnknownObjectException:
+    print(INFO + "Release does not exist. Creating empty release." + ENDC)
+except GithubException as e:
+    print(ERROR + f"GitHub API error: {e.status} {e.data}" + ENDC)
+    sys.exit(1)
+
+# Explicitly set make_latest="false" so the empty-body release is not
+# marked as the "latest" release. The "latest" flag is deferred until
+# publish-release-notes-to-github runs. PyGithub's create_git_release
+# defaults make_latest to "true", so the argument must be supplied.
+try:
+    repo.create_git_release(tag=version, name=version, message="",
+                            draft=False, prerelease=False,
+                            make_latest="false")
+    print(INFO + "Empty release created." + ENDC)
+except GithubException as e:
+    # A concurrent run may have created the release after the existence
+    # check above. The entrypoint is intended to be idempotent, so treat
+    # "already exists" as success.
+    errors = e.data.get('errors', []) if isinstance(e.data, dict) else []
+    already_exists = any(
+        isinstance(err, dict) and err.get('code') == 'already_exists'
+        for err in errors)
+    if e.status == 422 and already_exists:
+        print(INFO + "Release was created concurrently. Not modifying."
+              + ENDC)
+        sys.exit(0)
+    print(ERROR + f"GitHub API error: {e.status} {e.data}" + ENDC)
+    sys.exit(1)

@@ -7,7 +7,9 @@ from pathlib import Path
 import re
 import subprocess
 import sys
+from github import Auth
 from github import Github
+from github import GithubException
 from github import UnknownObjectException
 
 ENDC = '\033[0m'
@@ -28,7 +30,7 @@ if 'GITHUB_REPOSITORY' not in os.environ:
     print(ERROR + "GITHUB_REPOSITORY needs to be set in env. Exiting." + ENDC)
     sys.exit(1)
 
-# version is in the form of "refs/tags/release-1.0.0" where the version is 1.0.0
+# version is in the form of "refs/tags/announce-1.0.0" where the version is 1.0.0
 version = re.sub('refs/tags/announce-', '', os.environ['GITHUB_REF'])
 
 release_repo = os.environ['GITHUB_REPOSITORY']
@@ -62,16 +64,30 @@ else:
     print(INFO + "No CHANGELOG.md found." + ENDC)
 
 
-g = Github(os.environ['RELEASE_TOKEN'])
+g = Github(auth=Auth.Token(os.environ['RELEASE_TOKEN']))
 repo = g.get_repo(os.environ['GITHUB_REPOSITORY'])
 
 print(INFO + "Uploading release notes..." + ENDC)
 # check to see if the release already exists
+ghrelease = None
 try:
     ghrelease = repo.get_release(version)
-    print(INFO + "Release already exists. Updating release notes." + ENDC)
-    ghrelease.update_release(name=version, message=release_notes)
 except UnknownObjectException:
-    print(INFO + "Release does not exist. Creating release." + ENDC)
-    repo.create_git_release(version, version, release_notes)
+    pass
+except GithubException as e:
+    print(ERROR + f"GitHub API error: {e.status} {e.data}" + ENDC)
+    sys.exit(1)
+
+try:
+    if ghrelease is not None:
+        print(INFO + "Release already exists. Updating release notes." + ENDC)
+        ghrelease.update_release(name=version, message=release_notes,
+                                 make_latest="legacy")
+    else:
+        print(INFO + "Release does not exist. Creating release." + ENDC)
+        repo.create_git_release(version, version, release_notes,
+                                make_latest="legacy")
+except GithubException as e:
+    print(ERROR + f"GitHub API error: {e.status} {e.data}" + ENDC)
+    sys.exit(1)
 print(INFO + "Release notes uploaded." + ENDC)

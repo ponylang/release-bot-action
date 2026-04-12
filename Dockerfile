@@ -11,7 +11,7 @@ RUN apt-get update \
 
 RUN pip3 install --break-system-packages\
   gitpython \
-  pygithub==1.55 \
+  pygithub==2.9.0 \
   pylint \
   pyyaml \
   zulip

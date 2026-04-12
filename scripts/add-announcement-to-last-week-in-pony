@@ -5,6 +5,7 @@
 import os
 import re
 import sys
+from github import Auth
 from github import Github
 
 ENDC = '\033[0m'
@@ -25,14 +26,14 @@ if 'GITHUB_REPOSITORY' not in os.environ:
     print(ERROR + "GITHUB_REPOSITORY needs to be set in env. Exiting." + ENDC)
     sys.exit(1)
 
-# version is in the form of "refs/tags/release-1.0.0" where the version is 1.0.0
+# version is in the form of "refs/tags/announce-1.0.0" where the version is 1.0.0
 version = re.sub('refs/tags/announce-', '', os.environ['GITHUB_REF'])
 
 release_repo = os.environ['GITHUB_REPOSITORY']
 
 print(INFO + "Adding release to Last Week in Pony..." + ENDC)
 
-g = Github(os.environ['RELEASE_TOKEN'])
+g = Github(auth=Auth.Token(os.environ['RELEASE_TOKEN']))
 repo = g.get_repo('ponylang/ponylang-website')
 results = repo.get_issues(labels=['last-week-in-pony'])
 if results.totalCount == 0:

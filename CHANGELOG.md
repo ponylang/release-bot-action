@@ -6,9 +6,11 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Fixed
 
+- `releases/latest` URL on GitHub now points at the newest release ([PR #94](https://github.com/ponylang/release-bot-action/pull/94))
 
 ### Added
 
+- Add `create-empty-github-release` entrypoint ([PR #94](https://github.com/ponylang/release-bot-action/pull/94))
 
 ### Changed
 

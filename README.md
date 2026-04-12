@@ -152,11 +152,15 @@ jobs:
 
 ### Release
 
-The meat of the release process. This is the workflow that builds our actual release artefacts, updates documentation and whatever else. Release-bot only provides two commands to be used in this workflow.
+The meat of the release process. This is the workflow that builds our actual release artefacts, updates documentation and whatever else. Release-bot provides three commands to be used in this workflow.
 
 - pre-artefact-changelog-check
 
 Can be used to verify that the release workflow wasn't "accidentally" triggered.
+
+- create-empty-github-release
+
+Creates an empty GitHub release for the version tag so that release artefacts can be attached to it as they are built. Not required unless you need a GitHub release for artefact attachment.
 
 - trigger-release-announcement
 
@@ -354,6 +358,30 @@ An example step config:
         env:
           GIT_USER_NAME: "Ponylang Main Bot"
           GIT_USER_EMAIL: "ponylang.main@gmail.com"
+```
+
+### create-empty-github-release
+
+Creates an empty GitHub release for the tag being released. The release is created with an empty body, not marked as a draft, and not marked as the latest release. The release body and the "latest" flag can be set later by `publish-release-notes-to-github`.
+
+This command exists so that release artefacts can be attached to the GitHub release as they are built during the `release` workflow. It should be run as part of the `pre-artefact-creation` job, after `pre-artefact-changelog-check`.
+
+If a release for the tag already exists, `create-empty-github-release` does nothing. This means the command is safe to re-run if the `release` workflow has to be restarted.
+
+- **Must** be triggered by an `X.Y.Z` tag push.
+- **Should** be run after `pre-artefact-changelog-check` and before any artefact building steps.
+
+`create-empty-github-release` requires a GitHub personal access token with `public_repo` access. The personal access token needs to be passed in the environment variable `RELEASE_TOKEN`.
+
+An example step config:
+
+```yml
+      - name: Create empty GitHub release
+        uses: docker://ghcr.io/ponylang/release-bot-action:0.6.5
+        with:
+          entrypoint: create-empty-github-release
+        env:
+          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
 ```
 
 ### delete-announcement-tag
